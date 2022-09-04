@@ -19,12 +19,12 @@ https://github.com/pasutisu
     * This fork is developing only for my local friends.
 
 # Development
-* 'master'
+* `master`
     * Following to CaptainYS's one
-* 'develop'
+* `develop`
     * Main development branch
     * Always unstable
-* 'dev/*'
+* `dev/*`
     * Feature development branch
     * Super unstable
 
