@@ -1,3 +1,37 @@
+# YSFLIGHT Pola Edition
+Great original by CaptainYS
+http://www.ysflight.com
+
+Bit modified by pasutisu
+https://github.com/pasutisu
+
+# Very Important Notice
+* This fork licensed under [The 3-Clause BSD License](https://github.com/pasutisu/YSFLIGHT/blob/master/LICENSE) same of CaptainYS's one.
+* When you use this fork code, you MUST not try to send any question caused by using this fork code (include bug, feature request, etc...) to CaptainYS.
+* This fork is including incompatible implements with original YSFLIGHT.
+
+# Notice
+* If you found bug came from this fork code, you can send issue or pull request to this repository.
+    * I may try to fix it if it's possible when I have enough time.
+* I won't receive any feature request.
+    * This fork is developing only for my local friends.
+* I won't release pre-build binary publicly.
+    * This fork is developing only for my local friends.
+
+# Development
+* 'master'
+    * Following to CaptainYS's one
+* 'develop'
+    * Main development branch
+    * Always unstable
+* 'dev/*'
+    * Feature development branch
+    * Super unstable
+
+Original readme follows.
+
+___
+
 # YS Flight Simulator
 
 by CaptainYS
