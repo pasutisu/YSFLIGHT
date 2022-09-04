@@ -1890,7 +1890,11 @@ YSBOOL FsAirplane::LockOn(FsSimulation *sim,const double &radarAltLimit)
 
 						sqDist=tpos.GetSquareLength();
 						rcs=air->prop.GetRadarCrossSection();
-						if(prop.GetWeaponOfChoice()==FSWEAPON_AIM120)
+						if(prop.GetWeaponOfChoice()==FSWEAPON_AIM54)
+						{
+							aamRange=air->prop.GetAAMRange(FSWEAPON_AIM54);
+						}
+						else if(prop.GetWeaponOfChoice()==FSWEAPON_AIM120)
 						{
 							aamRange=air->prop.GetAAMRange(FSWEAPON_AIM120);
 						}

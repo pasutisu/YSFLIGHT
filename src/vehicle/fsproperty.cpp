@@ -364,6 +364,10 @@ void FsRotatingTurretState::FireWeapon(
 			case FSWEAPON_AGM65:
 			case FSWEAPON_ROCKET:
 			case FSWEAPON_AIM120:
+			case FSWEAPON_AIM54:
+			case FSWEAPON_AGM84:
+			case FSWEAPON_AGM88:
+			case FSWEAPON_CANNON:
 				{
 					YSHASHKEY targetKey=YSNULLHASHKEY;
 
@@ -394,6 +398,7 @@ void FsRotatingTurretState::FireWeapon(
 				break;
 			case FSWEAPON_BOMB:
 			case FSWEAPON_BOMB250:
+			case FSWEAPON_GBU28:
 				bul.Bomb(
 				    ctime,
 				    chTurret.wpnType,

@@ -144,6 +144,12 @@ inline const wchar_t *FsGetTextResource(const char *key,const wchar_t *alternati
 #define FSGUI_AIRDLG_WW2BOMBER                            FsGetTextResource("airdlg/ww2bomber",L"WW2 Bomber")
 #define FSGUI_AIRDLG_WW2DIVEBOMBER                        FsGetTextResource("airdlg/ww2divebomber",L"WW2 Dive Bomber")
 
+#define FSGUI_AIRDLG_AIM54                                FsGetTextResource("airdlg/aim54",L"AAM(Long Range)")
+#define FSGUI_AIRDLG_AGM84                                FsGetTextResource("airdlg/agm84",L"ASM")
+#define FSGUI_AIRDLG_AGM88                                FsGetTextResource("airdlg/agm88",L"ARM")
+#define FSGUI_AIRDLG_GBU28                                FsGetTextResource("airdlg/gbu28",L"BOM(5000lb)")
+#define FSGUI_AIRDLG_CANNON                               FsGetTextResource("airdlg/cannon",L"H-GUN")
+
 #define FSGUI_AIRCOMBATDLG_MSG_NOPLAYER                   FsGetTextResource("aircombatdlg/noplayerplane",L"Please select player airplane.")
 
 #define FSGUI_NEWFLTDLG_SELAIR                            FsGetTextResource("newfltdlg/selectair",L"Change Player Airplane")

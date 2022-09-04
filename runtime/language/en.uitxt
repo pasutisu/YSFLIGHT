@@ -115,6 +115,12 @@ $BGCOL 0
 +airdlg/ww2bomber                                  #WW2 Bomber
 +airdlg/ww2divebomber                              #WW2 Dive Bomber
 
++airdlg/aim54                                      #AAM(Long Range)
++airdlg/agm84                                      #ASM
++airdlg/agm88                                      #ARM
++airdlg/gbu28                                      #BOM(5000lb)
++airdlg/cannon                                     #H-GUN
+
 +aircombatdlg/noplayerplane                        #Please select player airplane
 
 +newfltdlg/createnewflight                         #=== Create New Flight ===

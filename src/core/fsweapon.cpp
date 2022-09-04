@@ -119,6 +119,22 @@ int FsKillCredit::GetAntiAirScore(YsString &msg,const FsSimulation *,const FsExi
 				msg.Append(" By Rocket (Times 2.0) ");
 				score=score*2;
 				break;
+			case FSWEAPON_AIM54:
+				msg.Append(" By AAM (Times 1.0) ");
+				break;
+			case FSWEAPON_AGM84:
+			case FSWEAPON_AGM88:
+				msg.Append(" By AGM (Times 2.0) ");
+				score=score*2;
+				break;
+			case FSWEAPON_GBU28:
+				msg.Append(" By Bomb (Times 1.2) ");
+				score=score*6/5;
+				break;
+			case FSWEAPON_CANNON:
+				msg.Append(" By Cannon (Times 1.5) ");
+				score=score*3/2;
+				break;
 			default:
 				msg.Append(" By ? (Times 1.0) ");
 				break;
@@ -209,6 +225,22 @@ int FsKillCredit::GetAntiGroundScore(YsString &msg,const FsSimulation *,const Fs
 			case FSWEAPON_AIM120:
 				msg.Append(" By AAM (Times 1.0) ");
 				score=score*6/5;
+				break;
+			case FSWEAPON_AIM54:
+				msg.Append(" By AAM (Times 1.0) ");
+				break;
+			case FSWEAPON_AGM84:
+			case FSWEAPON_AGM88:
+				msg.Append(" By AGM (Times 2.0) ");
+				score=score*2;
+				break;
+			case FSWEAPON_GBU28:
+				msg.Append(" By Bomb (Times 1.2) ");
+				score=score*6/5;
+				break;
+			case FSWEAPON_CANNON:
+				msg.Append(" By Cannon (Times 1.5) ");
+				score=score*3/2;
 				break;
 
 			default:
@@ -607,6 +639,21 @@ FsVisualDnm FsWeapon::aim9x_coarse=nullptr;
 FsVisualDnm FsWeapon::flarePod=nullptr;
 FsVisualDnm FsWeapon::fuelTank=nullptr;
 
+FsVisualDnm FsWeapon::aim54=nullptr;
+FsVisualDnm FsWeapon::aim54s=nullptr;
+FsVisualDnm FsWeapon::aim54_coarse=nullptr;
+FsVisualDnm FsWeapon::agm84=nullptr;
+FsVisualDnm FsWeapon::agm84s=nullptr;
+FsVisualDnm FsWeapon::agm84_coarse=nullptr;
+FsVisualDnm FsWeapon::agm88=nullptr;
+FsVisualDnm FsWeapon::agm88s=nullptr;
+FsVisualDnm FsWeapon::agm88_coarse=nullptr;
+FsVisualDnm FsWeapon::gbu28=nullptr;
+FsVisualDnm FsWeapon::gbu28s=nullptr;
+FsVisualDnm FsWeapon::gbu28_coarse=nullptr;
+FsVisualDnm FsWeapon::cannon=nullptr;
+FsVisualDnm FsWeapon::cannons=nullptr;
+FsVisualDnm FsWeapon::cannon_coarse=nullptr;
 
 const double FsTrailTimePerSegment=0.1;
 
@@ -661,6 +708,16 @@ FsWeapon::FsWeapon()
 		return FsAmmunitionIndication::WPNTYPE_AIM9X;
 	case FSWEAPON_FUELTANK:
 		return FsAmmunitionIndication::WPNTYPE_FUELTANK;
+	case FSWEAPON_AIM54:
+		return FsAmmunitionIndication::WPNTYPE_AIM54;
+	case FSWEAPON_AGM84:
+		return FsAmmunitionIndication::WPNTYPE_AGM84;
+	case FSWEAPON_AGM88:
+		return FsAmmunitionIndication::WPNTYPE_AGM88;
+	case FSWEAPON_GBU28:
+		return FsAmmunitionIndication::WPNTYPE_GBU28;
+	case FSWEAPON_CANNON:
+		return FsAmmunitionIndication::WPNTYPE_CANNON;
 	}
 }
 
@@ -703,6 +760,21 @@ FsWeapon::FsWeapon()
 		break;
 	case FSWEAPON_FUELTANK:
 		vis=&fuelTank;
+		break;
+	case FSWEAPON_AIM54:
+		vis=(coarse!=YSTRUE ? &aim54s : &aim54_coarse);
+		break;
+	case FSWEAPON_AGM84:
+		vis=(coarse!=YSTRUE ? &agm84s : &agm84_coarse);
+		break;
+	case FSWEAPON_AGM88:
+		vis=(coarse!=YSTRUE ? &agm88s : &agm88_coarse);
+		break;
+	case FSWEAPON_GBU28:
+		vis=(coarse!=YSTRUE ? &gbu28s : &gbu28_coarse);
+		break;
+	case FSWEAPON_CANNON:
+		vis=(coarse!=YSTRUE ? &cannons : &cannon_coarse);
 		break;
 	}
 
@@ -750,6 +822,21 @@ FsWeapon::FsWeapon()
 		break;
 	case FSWEAPON_FUELTANK:
 		vis=&fuelTank;
+		break;
+	case FSWEAPON_AIM54:
+		vis=(coarse!=YSTRUE ? &aim54s : &aim54_coarse);
+		break;
+	case FSWEAPON_AGM84:
+		vis=(coarse!=YSTRUE ? &agm84s : &agm84_coarse);
+		break;
+	case FSWEAPON_AGM88:
+		vis=(coarse!=YSTRUE ? &agm88s : &agm88_coarse);
+		break;
+	case FSWEAPON_GBU28:
+		vis=(coarse!=YSTRUE ? &gbu28s : &gbu28_coarse);
+		break;
+	case FSWEAPON_CANNON:
+		vis=(coarse!=YSTRUE ? &cannons : &cannon_coarse);
 		break;
 	}
 
@@ -809,6 +896,15 @@ void FsWeapon::Fire(
 		break;
 	case FSWEAPON_AGM65:
 		timeUnguided=1.6;
+		break;
+	case FSWEAPON_AIM54:
+		timeUnguided=6.0;
+		break;
+	case FSWEAPON_AGM84:
+		timeUnguided=10.0;
+		break;
+	case FSWEAPON_AGM88:
+		timeUnguided=3.0;
 		break;
 	default:
 		timeUnguided=0.0;
@@ -1026,6 +1122,85 @@ void FsWeapon::Move(const double &dt,const double &cTime,const FsWeather &weathe
 			att.SetP(att.p()+YsPi*dt*2.0);
 			att.SetB(att.b()+YsPi*dt*3.0);
 			break;
+		case FSWEAPON_AIM54:
+		case FSWEAPON_AGM84:
+		case FSWEAPON_AGM88:
+			if(target!=NULL && timeUnguided<YsTolerance)
+			{
+				YsVec3 tpos;
+				YsMatrix4x4 mat;
+
+				mat.Translate(pos);
+				mat.Rotate(att);
+				mat.Invert();
+
+				tpos=mat*(target->GetPosition());
+				if(type==FSWEAPON_AIM54)
+				{
+					const FsWeapon *flare;
+					YsVec3 flarePos;
+					double flareZ;
+					YSBOOL fooled;
+					fooled=YSFALSE;
+					flareZ=lifeRemain;
+					for(flare=flareList; flare!=NULL; flare=flare->nextFlare)
+					{
+						flarePos=mat*flare->pos;
+						if(flarePos.z()>0.0 && flarePos.z()<flareZ &&
+						   atan2(flarePos.x()*flarePos.x()+flarePos.y()*flarePos.y(),flarePos.z())<radar)
+						{
+							fooled=YSTRUE;
+							tpos=flarePos;
+							flareZ=flarePos.z();
+						}
+					}
+				}
+
+				double r;
+				r=atan2(sqrt(tpos.x()*tpos.x()+tpos.y()*tpos.y()),tpos.z());
+				if(r<radar || ((type==FSWEAPON_AIM54) && YSTRUE==IsOwnerStillHaveTarget()))
+				{
+					double maxMovement;
+					maxMovement=mobility*dt;
+
+					double yaw,pit;
+					yaw=atan2(-tpos.x(),tpos.z());
+					pit=atan2( tpos.y(),tpos.z());
+
+					yaw=YsBound(yaw,-maxMovement,maxMovement);
+					pit=YsBound(pit,-maxMovement,maxMovement);
+					att.YawLeft(yaw);
+					att.NoseUp(pit);
+				}
+				else if(tpos.z()<-300.0)
+				{
+					target=NULL;
+				}
+			}
+
+			if(timeUnguided>0.0)
+			{
+				timeUnguided-=dt;
+			}
+
+			if(velocity<maxVelocity)
+			{
+				velocity+=50.0*dt;  // 20.0 m/ss (^_^;)
+			}
+			else if(velocity>maxVelocity)
+			{
+				velocity-=20.0*dt;
+			}
+			vec.Set(0.0,0.0,velocity);
+			att.Mul(vec,vec); // vec=att.GetMatrix()*vec;
+			break;
+		case FSWEAPON_GBU28:
+			vec.Set(vec.x(),vec.y()-FsGravityConst*dt,vec.z());
+			att.SetForwardVector(vec);
+			break;
+		case FSWEAPON_CANNON:
+			vec.Set(vec.x(),vec.y()-FsGravityConst*dt,vec.z());
+			break;
 		}
 
 		prv=pos;
@@ -1034,6 +1209,14 @@ void FsWeapon::Move(const double &dt,const double &cTime,const FsWeather &weathe
 		pos+=weather.GetWind()*dt;
 
 		if(type!=FSWEAPON_BOMB && type!=FSWEAPON_BOMB250 && type!=FSWEAPON_BOMB500HD && type!=FSWEAPON_FUELTANK)  // Bomb falls until it hits the ground
+		{
+			lifeRemain=lifeRemain-velocity*dt;
+			if(lifeRemain<=YsTolerance)
+			{
+				lifeRemain=0.0;
+			}
+		}
+		if(type!=FSWEAPON_GBU28)  // Bomb falls until it hits the ground
 		{
 			lifeRemain=lifeRemain-velocity*dt;
 			if(lifeRemain<=YsTolerance)
@@ -1052,6 +1235,13 @@ void FsWeapon::Move(const double &dt,const double &cTime,const FsWeather &weathe
 	}
 
 	if(type==FSWEAPON_AIM9 || type==FSWEAPON_AIM9X || type==FSWEAPON_AGM65 || type==FSWEAPON_AIM120 || type==FSWEAPON_FLARE)
+	{
+		if(nullptr!=trail && lifeRemain>0.0)
+		{
+			trail->Add(dt,cTime,pos,att);
+		}
+	}
+	if(type==FSWEAPON_AIM54 || type==FSWEAPON_AGM84 || type==FSWEAPON_AGM88)
 	{
 		if(nullptr!=trail && lifeRemain>0.0)
 		{
@@ -1124,6 +1314,7 @@ void FsWeapon::HitGround(
 				switch(type)
 				{
 				case FSWEAPON_GUN:
+				case FSWEAPON_CANNON:
 					if((step&3)==0)
 					{
 						// Adjust for elevation grid.
@@ -1167,6 +1358,7 @@ void FsWeapon::HitGround(
 				case FSWEAPON_BOMB250:
 				case FSWEAPON_BOMB500HD:
 				case FSWEAPON_FUELTANK:
+				case FSWEAPON_GBU28:
 					if(collType==1)
 					{
 						pos.SetY(elv);
@@ -1252,7 +1444,7 @@ YSBOOL FsWeapon::HitObject(
 		sqDist2=(lastChecked-(*tpos)).GetSquareLength();
 
 		// Proximity tube >>
-		if(type==FSWEAPON_AIM9 || type==FSWEAPON_AIM9X || type==FSWEAPON_AIM120)
+		if(type==FSWEAPON_AIM9 || type==FSWEAPON_AIM9X || type==FSWEAPON_AIM120 || type==FSWEAPON_AIM54)
 		{
 			double range;
 			YsVec3 np;
@@ -1269,6 +1461,9 @@ YSBOOL FsWeapon::HitObject(
 				range=23.0;
 				break;
 			case FSWEAPON_AIM120:
+				range=25.0;
+				break;
+			case FSWEAPON_AIM54:
 				range=25.0;
 				break;
 			}
@@ -1408,6 +1603,110 @@ YSBOOL FsWeapon::HitObject(
 					{
 						ExplodeBomb(callback,ctime,pos,50.0,explosion,sim,killCredit);
 					}
+					return YSTRUE;
+				}
+			}
+			else if(type==FSWEAPON_CANNON)
+			{
+				if(sqDist1>rad*rad && sqDist2>rad*rad && sqDist3>rad*rad)
+				{
+					return YSFALSE;
+				}
+
+				YsShellPolygonHandle plHd;
+				YsVec3 intersect;
+				plHd=coll.ShootRayH(intersect,lastChecked,pos-lastChecked);
+
+				if(plHd!=NULL && YsCheckInBetween3(intersect,pos,lastChecked)==YSTRUE)
+				{
+					YSBOOL killed;
+					lifeRemain=0.0;
+
+					if(callback->GiveDamage(killed,obj,destructivePower,FSDIEDOF_GUN,*this)==YSTRUE &&
+					   explosion!=NULL)
+					{
+						callback->ThrowRandomDebris(ctime,intersect,obj.GetAttitude(),60.0);
+						if(killed==YSTRUE)
+						{
+							callback->ThrowMultiDebris(5,ctime,pos,obj.GetAttitude(),60.0);
+							sim->KillCallBack(obj,*tpos);
+							AddKillCredit(killCredit,&obj,ctime);
+						}
+						else
+						{
+							explosion->Explode(ctime,intersect,5.0,3.0,3.0,YSTRUE,NULL,YSTRUE);
+						}
+					}
+
+					return YSTRUE;
+				}
+			}
+			else if(type==FSWEAPON_GBU28)
+			{
+				if(sqDist1>rad*rad && sqDist2>rad*rad && sqDist3>rad*rad)
+				{
+					return YSFALSE;
+				}
+
+
+				YsShellPolygonHandle plHd;
+				YsVec3 intersect;
+				plHd=coll.ShootRayH(intersect,lastChecked,pos-lastChecked);
+
+				if(plHd!=NULL && YsCheckInBetween3(intersect,pos,lastChecked)==YSTRUE)
+				{
+					YSBOOL killed;
+					lifeRemain=0.0;
+
+					if(callback->GiveDamage(killed,obj,destructivePower,FSDIEDOF_GUN,*this)==YSTRUE &&
+					   explosion!=NULL)
+					{
+						if(killed==YSTRUE)
+						{
+							callback->ThrowMultiDebris(5,ctime,pos,obj.GetAttitude(),60.0);
+							sim->KillCallBack(obj,*tpos);
+							AddKillCredit(killCredit,&obj,ctime);
+						}
+						else
+						{
+							explosion->Explode(ctime,intersect,5.0,3.0,3.0,YSTRUE,NULL,YSTRUE);
+						}
+					}
+
+					ExplodeBomb(callback,ctime,pos,destructivePower*10,explosion,sim,killCredit);
+					return YSTRUE;
+				}
+			}
+			else if(type==FSWEAPON_AIM54 || type==FSWEAPON_AGM84 || type==FSWEAPON_AGM88)
+			{
+				YsVec3 is;
+				// Came close to the designated target
+				// Or, direct impact
+				if((&obj==target && YsCheckInBetween3(np,pos,lastChecked)==YSTRUE && sqDist3<rad*rad) ||
+				   (coll.ShootRayH(is,lastChecked,pos-lastChecked)!=NULL &&
+				    YsCheckInBetween3(is,pos,lastChecked)==YSTRUE))
+				{
+					YSBOOL killed;
+					lifeRemain=0.0;
+					target=NULL;
+					if(callback->GiveDamage(killed,obj,destructivePower,FSDIEDOF_MISSILE,*this)==YSTRUE && explosion!=NULL)
+					{
+						if(killed==YSTRUE)
+						{
+							callback->ThrowMultiDebris(5,ctime,pos,obj.GetAttitude(),60.0);
+							sim->KillCallBack(obj,*tpos);
+							AddKillCredit(killCredit,&obj,ctime);
+						}
+						else
+						{
+							explosion->Explode(ctime,pos,20.0,5.0,20.0,YSTRUE,NULL,YSTRUE);
+						}
+					}
+
+					// if(type==FSWEAPON_ROCKET)
+					// {
+					// 	ExplodeBomb(callback,ctime,pos,50.0,explosion,sim,killCredit);
+					// }
 					return YSTRUE;
 				}
 			}
@@ -1868,6 +2167,146 @@ YSRESULT FsWeaponHolder::LoadMissilePattern(void)
 		}
 	}
 
+	if(FsWeapon::aim54==nullptr)
+	{
+		FsWeapon::aim54.Load(L"misc/aim120.srf");
+		if(FsWeapon::aim54==nullptr)
+		{
+			fsStderr.Printf("Cannot read AIM54 pattern.\n");
+			return YSERR;
+		}
+	}
+	if(FsWeapon::aim54s==nullptr)
+	{
+		FsWeapon::aim54s.Load(L"misc/aim120s.srf");
+		if(FsWeapon::aim54s==nullptr)
+		{
+			fsStderr.Printf("Cannot read AIM54 (silent) pattern.\n");
+			return YSERR;
+		}
+	}
+	if(FsWeapon::aim54_coarse==nullptr)
+	{
+		FsWeapon::aim54_coarse.Load(L"misc/aim120_coarse.srf");
+		if(FsWeapon::aim54_coarse==nullptr)
+		{
+			fsStderr.Printf("Cannot read AIM54 (coarse) pattern.\n");
+			return YSERR;
+		}
+	}
+
+	if(FsWeapon::agm84==nullptr)
+	{
+		FsWeapon::agm84.Load(L"misc/agm65.srf");
+		if(FsWeapon::agm84==nullptr)
+		{
+			fsStderr.Printf("Cannot read AGM84 pattern.\n");
+			return YSERR;
+		}
+	}
+	if(FsWeapon::agm84s==nullptr)
+	{
+		FsWeapon::agm84s.Load(L"misc/agm65s.srf");
+		if(FsWeapon::agm84s==nullptr)
+		{
+			fsStderr.Printf("Cannot read AGM84 (silent) pattern.\n");
+			return YSERR;
+		}
+	}
+	if(FsWeapon::agm84_coarse==nullptr)
+	{
+		FsWeapon::agm84_coarse.Load(L"misc/agm_coarse.srf");
+		if(FsWeapon::agm84_coarse==nullptr)
+		{
+			fsStderr.Printf("Cannot read AGM84 (coarse) pattern.\n");
+			return YSERR;
+		}
+	}
+
+	if(FsWeapon::agm88==nullptr)
+	{
+		FsWeapon::agm88.Load(L"misc/agm65.srf");
+		if(FsWeapon::agm88==nullptr)
+		{
+			fsStderr.Printf("Cannot read AGM88 pattern.\n");
+			return YSERR;
+		}
+	}
+	if(FsWeapon::agm88s==nullptr)
+	{
+		FsWeapon::agm88s.Load(L"misc/agm65s.srf");
+		if(FsWeapon::agm88s==nullptr)
+		{
+			fsStderr.Printf("Cannot read AGM88 (silent) pattern.\n");
+			return YSERR;
+		}
+	}
+	if(FsWeapon::agm88_coarse==nullptr)
+	{
+		FsWeapon::agm88_coarse.Load(L"misc/agm_coarse.srf");
+		if(FsWeapon::agm88_coarse==nullptr)
+		{
+			fsStderr.Printf("Cannot read AGM88 (coarse) pattern.\n");
+			return YSERR;
+		}
+	}
+
+	if(FsWeapon::gbu28==nullptr)
+	{
+		FsWeapon::gbu28.Load(L"misc/bomb.srf");
+		if(FsWeapon::gbu28==nullptr)
+		{
+			fsStderr.Printf("Cannot read GBU28 pattern.\n");
+			return YSERR;
+		}
+	}
+	if(FsWeapon::gbu28s==nullptr)
+	{
+		FsWeapon::gbu28s.Load(L"misc/bomb.srf");
+		if(FsWeapon::gbu28s==nullptr)
+		{
+			fsStderr.Printf("Cannot read GBU28 (silent) pattern.\n");
+			return YSERR;
+		}
+	}
+	if(FsWeapon::gbu28_coarse==nullptr)
+	{
+		FsWeapon::gbu28_coarse.Load(L"misc/bomb_coarse.srf");
+		if(FsWeapon::gbu28_coarse==nullptr)
+		{
+			fsStderr.Printf("Cannot read GBU28 (coarse) pattern.\n");
+			return YSERR;
+		}
+	}
+
+	if(FsWeapon::cannon==nullptr)
+	{
+		FsWeapon::cannon.Load(L"misc/rocket.srf");
+		if(FsWeapon::cannon==nullptr)
+		{
+			fsStderr.Printf("Cannot read CANNON pattern.\n");
+			return YSERR;
+		}
+	}
+	if(FsWeapon::cannons==nullptr)
+	{
+		FsWeapon::cannons.Load(L"misc/rockets.srf");
+		if(FsWeapon::cannons==nullptr)
+		{
+			fsStderr.Printf("Cannot read CANNON (silent) pattern.\n");
+			return YSERR;
+		}
+	}
+	if(FsWeapon::cannon_coarse==nullptr)
+	{
+		FsWeapon::cannon_coarse.Load(L"misc/rocket_coarse.srf");
+		if(FsWeapon::cannon_coarse==nullptr)
+		{
+			fsStderr.Printf("Cannot read CANNON (coarse) pattern.\n");
+			return YSERR;
+		}
+	}
+
 
 	return YSOK;
 }
@@ -1997,6 +2436,71 @@ YSRESULT FsWeaponHolder::LoadMissilePattern(void)
 	{
 		FsWeapon::fuelTank.CleanUp();
 	}
+
+	if(FsWeapon::aim54!=nullptr)
+	{
+		FsWeapon::aim54.CleanUp();
+	}
+	if(FsWeapon::aim54s!=nullptr)
+	{
+		FsWeapon::aim54s.CleanUp();
+	}
+	if(FsWeapon::aim54_coarse!=nullptr)
+	{
+		FsWeapon::aim54_coarse.CleanUp();
+	}
+
+	if(FsWeapon::agm84!=nullptr)
+	{
+		FsWeapon::agm84.CleanUp();
+	}
+	if(FsWeapon::agm84s!=nullptr)
+	{
+		FsWeapon::agm84s.CleanUp();
+	}
+	if(FsWeapon::agm84_coarse!=nullptr)
+	{
+		FsWeapon::agm84_coarse.CleanUp();
+	}
+
+	if(FsWeapon::agm88!=nullptr)
+	{
+		FsWeapon::agm88.CleanUp();
+	}
+	if(FsWeapon::agm88s!=nullptr)
+	{
+		FsWeapon::agm88s.CleanUp();
+	}
+	if(FsWeapon::agm88_coarse!=nullptr)
+	{
+		FsWeapon::agm88_coarse.CleanUp();
+	}
+
+	if(FsWeapon::gbu28!=nullptr)
+	{
+		FsWeapon::gbu28.CleanUp();
+	}
+	if(FsWeapon::gbu28s!=nullptr)
+	{
+		FsWeapon::gbu28s.CleanUp();
+	}
+	if(FsWeapon::gbu28_coarse!=nullptr)
+	{
+		FsWeapon::gbu28_coarse.CleanUp();
+	}
+
+	if(FsWeapon::cannon!=nullptr)
+	{
+		FsWeapon::cannon.CleanUp();
+	}
+	if(FsWeapon::cannons!=nullptr)
+	{
+		FsWeapon::cannons.CleanUp();
+	}
+	if(FsWeapon::cannon_coarse!=nullptr)
+	{
+		FsWeapon::cannon_coarse.CleanUp();
+	}
 }
 
 YSRESULT FsWeaponHolder::Save(FILE *fp,FsSimulation *sim,int wpnPosPrecision,int wpnAttPrecision)
@@ -2082,6 +2586,21 @@ YSRESULT FsWeaponHolder::Save(FILE *fp,FsSimulation *sim,int wpnPosPrecision,int
 			else if(rec->type==FSWEAPON_ROCKET)
 			{
 				fprintf(fp,"%.2f\n",rec->vMax);
+			}
+			else if(rec->type==FSWEAPON_AIM54)
+			{
+				int targetId;
+				targetId=sim->GetAirplaneIdFromHandle(rec->target);
+				fprintf(fp,"%.2f %.2f %.2f %d\n",
+				    rec->vMax,rec->mobility,rec->radar,targetId);
+			}
+			else if(rec->type==FSWEAPON_AGM84 || rec->type==FSWEAPON_AGM88)
+			{
+				int targetId;
+				targetId=-1;
+				targetId=sim->GetGroundIdFromHandle(rec->target);
+				fprintf(fp,"%.2f %.2f %.2f %d\n",
+				    rec->vMax,rec->mobility,rec->radar,targetId);
 			}
 		}
 
@@ -2258,6 +2777,28 @@ YSRESULT FsWeaponHolder::Load(FILE *fp,FsSimulation *sim)
 						rec.target=NULL;
 						rec.mobility=0.0;
 					}
+					else if(rec.type==FSWEAPON_AIM54)
+					{
+						int id;
+						fgets(buf,256,fp);
+						sscanf(buf,"%f%f%f%d",
+						    &rec.vMax,&rec.mobility,&rec.radar,&id);
+						rec.target=sim->GetAirplaneById(id);
+					}
+					else if(rec.type==FSWEAPON_AGM84 || rec.type==FSWEAPON_AGM88)
+					{
+						int id;
+						fgets(buf,256,fp);
+						sscanf(buf,"%f%f%f%d",
+						    &rec.vMax,&rec.mobility,&rec.radar,&id);
+						rec.target=sim->GetGroundById(id);
+					}
+					else if(rec.type==FSWEAPON_CANNON)
+					{
+						rec.vMax=rec.velocity;
+						rec.mobility=0.0F;
+						rec.target=NULL;
+					}
 
 					toPlay->AddElement(rec,t);
 				}
@@ -2311,6 +2852,28 @@ YSRESULT FsWeaponHolder::Load(FILE *fp,FsSimulation *sim)
 						sscanf(buf,"%f",&rec.vMax);
 						rec.target=NULL;
 						rec.mobility=0.0;
+					}
+					else if(rec.type==FSWEAPON_AIM54)
+					{
+						int id;
+						fgets(buf,256,fp);
+						sscanf(buf,"%f%f%f%d",
+						    &rec.vMax,&rec.mobility,&rec.radar,&id);
+						rec.target=sim->GetAirplaneById(id);
+					}
+					else if(rec.type==FSWEAPON_AGM84 || rec.type==FSWEAPON_AGM88)
+					{
+						int id;
+						fgets(buf,256,fp);
+						sscanf(buf,"%f%f%f%d",
+						    &rec.vMax,&rec.mobility,&rec.radar,&id);
+						rec.target=sim->GetGroundById(id);
+					}
+					else if(rec.type==FSWEAPON_CANNON)
+					{
+						rec.vMax=rec.velocity;
+						rec.mobility=0.0F;
+						rec.target=NULL;
 					}
 
 					toPlay->AddElement(rec,t);
@@ -3059,8 +3622,11 @@ YSRESULT FsWeaponHolder::FindFirstMissilePositionThatIsReallyGuided(YsVec3 &vec,
 		if(seeker->lifeRemain>maxLifeRemain)
 		{
 			if(((seeker->type==FSWEAPON_AIM9 || seeker->type==FSWEAPON_AIM9X || seeker->type==FSWEAPON_AGM65 ||
-			     seeker->type==FSWEAPON_AIM120) && seeker->target!=NULL) ||
-		        (seeker->type==FSWEAPON_BOMB || seeker->type==FSWEAPON_BOMB250 || seeker->type==FSWEAPON_BOMB500HD))
+			     seeker->type==FSWEAPON_AIM120 ||
+			     seeker->type==FSWEAPON_AIM54 || seeker->type==FSWEAPON_AGM84 || seeker->type==FSWEAPON_AGM88
+			    ) && seeker->target!=NULL) ||
+		        (seeker->type==FSWEAPON_BOMB || seeker->type==FSWEAPON_BOMB250 || seeker->type==FSWEAPON_BOMB500HD ||
+			     seeker->type==FSWEAPON_GBU28))
 			{
 				vec=seeker->pos;
 				att=seeker->att;
@@ -3083,8 +3649,11 @@ YSRESULT FsWeaponHolder::FindOldestMissilePosition(YsVec3 &vec,YsAtt3 &att,const
 		if(seeker->firedBy==fired && seeker->lifeRemain>YsTolerance)
 		{
 			if(((seeker->type==FSWEAPON_AIM9 || seeker->type==FSWEAPON_AIM9X || seeker->type==FSWEAPON_AGM65 ||
-			     seeker->type==FSWEAPON_AIM120) && seeker->target!=NULL) ||
-		        (seeker->type==FSWEAPON_BOMB || seeker->type==FSWEAPON_BOMB250 || seeker->type==FSWEAPON_BOMB500HD))
+			     seeker->type==FSWEAPON_AIM120 ||
+			     seeker->type==FSWEAPON_AIM54 || seeker->type==FSWEAPON_AGM84 || seeker->type==FSWEAPON_AGM88
+			    ) && seeker->target!=NULL) ||
+		        (seeker->type==FSWEAPON_BOMB || seeker->type==FSWEAPON_BOMB250 || seeker->type==FSWEAPON_BOMB500HD ||
+			     seeker->type==FSWEAPON_GBU28))
 			{
 				vec=seeker->pos;
 				att=seeker->att;
@@ -3103,8 +3672,11 @@ YSRESULT FsWeaponHolder::FindNewestMissilePosition(YsVec3 &vec,YsAtt3 &att,const
 		if(seeker->firedBy==fired && seeker->lifeRemain>YsTolerance)
 		{
 			if(((seeker->type==FSWEAPON_AIM9 || seeker->type==FSWEAPON_AIM9X || seeker->type==FSWEAPON_AGM65 ||
-			     seeker->type==FSWEAPON_AIM120) && seeker->target!=NULL) ||
-		        (seeker->type==FSWEAPON_BOMB || seeker->type==FSWEAPON_BOMB250 || seeker->type==FSWEAPON_BOMB500HD))
+			     seeker->type==FSWEAPON_AIM120 ||
+			     seeker->type==FSWEAPON_AIM54 || seeker->type==FSWEAPON_AGM84 || seeker->type==FSWEAPON_AGM88
+			    ) && seeker->target!=NULL) ||
+		        (seeker->type==FSWEAPON_BOMB || seeker->type==FSWEAPON_BOMB250 || seeker->type==FSWEAPON_BOMB500HD ||
+			     seeker->type==FSWEAPON_GBU28))
 			{
 				vec=seeker->pos;
 				att=seeker->att;
@@ -3569,7 +4141,10 @@ unsigned FsEncodeWeaponRecord(unsigned char dat[],FsSimulation *,const FsWeaponR
 	   rec.type==FSWEAPON_AIM9 ||
 	   rec.type==FSWEAPON_AIM9X ||
 	   rec.type==FSWEAPON_AIM120 || // 2005/03/03
-	   rec.type==FSWEAPON_ROCKET)
+	   rec.type==FSWEAPON_ROCKET ||
+	   rec.type==FSWEAPON_AIM54 ||
+	   rec.type==FSWEAPON_AGM84 ||
+	   rec.type==FSWEAPON_AGM88)
 	{
 		FsPushFloat(ptr,rec.vMax);
 		FsPushFloat(ptr,rec.mobility);
@@ -3632,7 +4207,10 @@ YSRESULT FsDecodeWeaponRecord
 	   rec.type==FSWEAPON_AIM9 ||
 	   rec.type==FSWEAPON_AIM9X ||
 	   rec.type==FSWEAPON_AIM120 || // 2005/03/03
-	   rec.type==FSWEAPON_ROCKET)
+	   rec.type==FSWEAPON_ROCKET ||
+	   rec.type==FSWEAPON_AIM54 ||
+	   rec.type==FSWEAPON_AGM84 ||
+	   rec.type==FSWEAPON_AGM88)
 	{
 		rec.vMax=FsPopFloat(ptr);
 		rec.mobility=FsPopFloat(ptr);
@@ -3749,6 +4327,26 @@ FSWEAPONTYPE FsGetWeaponTypeByString(const char strIn[])
 	{
 		return FSWEAPON_FUELTANK;
 	}
+	if(strcmp(str,"AIM54")==0)
+	{
+		return FSWEAPON_AIM54;
+	}
+	if(strcmp(str,"AGM84")==0)
+	{
+		return FSWEAPON_AGM84;
+	}
+	if(strcmp(str,"AGM88")==0)
+	{
+		return FSWEAPON_AGM88;
+	}
+	if(strcmp(str,"GBU28")==0)
+	{
+		return FSWEAPON_GBU28;
+	}
+	if(strcmp(str,"CANNON")==0)
+	{
+		return FSWEAPON_CANNON;
+	}
 
 	return FSWEAPON_NULL;
 }
@@ -3783,6 +4381,16 @@ const char *FsGetWeaponString(FSWEAPONTYPE wpnType)
 		return "IFLR";
 	case FSWEAPON_FUELTANK:
 		return "FUEL";
+	case FSWEAPON_AIM54:
+		return "AIM54";
+	case FSWEAPON_AGM84:
+		return "AGM84";
+	case FSWEAPON_AGM88:
+		return "AGM88";
+	case FSWEAPON_GBU28:
+		return "GBU28";
+	case FSWEAPON_CANNON:
+		return "CANNON";
 	default:
 		return "NULL";
 	}

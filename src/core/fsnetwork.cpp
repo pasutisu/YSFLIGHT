@@ -1402,7 +1402,10 @@ YSRESULT FsSocketServer::RectifyIllegalMissiles(void)
 			if(user[userId].air->Prop().GetNumWeapon(FSWEAPON_AIM9)>0 ||
 			   user[userId].air->Prop().GetNumWeapon(FSWEAPON_AIM120)>0 ||
 			   user[userId].air->Prop().GetNumWeapon(FSWEAPON_AIM9X)>0 ||
-			   user[userId].air->Prop().GetNumWeapon(FSWEAPON_AGM65)>0)
+			   user[userId].air->Prop().GetNumWeapon(FSWEAPON_AGM65)>0 ||
+			   user[userId].air->Prop().GetNumWeapon(FSWEAPON_AIM54)>0 ||
+			   user[userId].air->Prop().GetNumWeapon(FSWEAPON_AGM84)>0 ||
+			   user[userId].air->Prop().GetNumWeapon(FSWEAPON_AGM88)>0)
 			{
 				int idOnSvr;
 				idOnSvr=FsExistence::GetSearchKey(user[userId].air);

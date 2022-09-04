@@ -132,11 +132,11 @@ typedef enum
 	FSWEAPON_AIM9X,          // The order shall not be changed.
 	FSWEAPON_FLAREPOD,       // The order shall not be changed.
 	FSWEAPON_FUELTANK,       // The order shall not be changed.
-	FSWEAPON_RESERVED13,     // The order shall not be changed.
-	FSWEAPON_RESERVED14,     // The order shall not be changed.
-	FSWEAPON_RESERVED15,     // The order shall not be changed.
-	FSWEAPON_RESERVED16,     // The order shall not be changed.
-	FSWEAPON_RESERVED17,     // The order shall not be changed.
+	FSWEAPON_AIM54,          // The order shall not be changed.
+	FSWEAPON_AGM84,          // The order shall not be changed.
+	FSWEAPON_AGM88,          // The order shall not be changed.
+	FSWEAPON_GBU28,          // The order shall not be changed.
+	FSWEAPON_CANNON,         // The order shall not be changed.
 	FSWEAPON_RESERVED18,     // The order shall not be changed.
 	FSWEAPON_RESERVED19,     // The order shall not be changed.
 	FSWEAPON_RESERVED20,     // The order shall not be changed.

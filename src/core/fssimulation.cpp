@@ -2274,7 +2274,8 @@ void FsSimulation::PrepareRunSimulation(void)
 		{
 			if(seeker->Prop().GetNumWeapon(FSWEAPON_AIM9)>0 ||
 			   seeker->Prop().GetNumWeapon(FSWEAPON_AIM120)>0 ||
-			   seeker->Prop().GetNumWeapon(FSWEAPON_AIM9X)>0)
+			   seeker->Prop().GetNumWeapon(FSWEAPON_AIM9X)>0 ||
+			   seeker->Prop().GetNumWeapon(FSWEAPON_AIM54)>0)
 			{
 				seeker->SendCommand("ULOADAAM");
 			}
@@ -3039,6 +3040,9 @@ void FsSimulation::GenerateAttackerAirplane(
 				   airSeeker->Prop().GetNumWeapon(FSWEAPON_BOMB)>0 ||
 				   airSeeker->Prop().GetNumWeapon(FSWEAPON_ROCKET)>0 ||
 				   airSeeker->Prop().GetNumWeapon(FSWEAPON_BOMB250)>0 ||
+				   airSeeker->Prop().GetNumWeapon(FSWEAPON_AGM84)>0 ||
+				   airSeeker->Prop().GetNumWeapon(FSWEAPON_AGM88)>0 ||
+				   airSeeker->Prop().GetNumWeapon(FSWEAPON_GBU28)>0 ||
 				   (airSeeker->Prop().GetPosition()-refPos).GetLength()<10000.0)
 				{
 					nCurrentAttacker++;
@@ -3344,12 +3348,14 @@ void FsSimulation::GenerateFriendlyAirplane(FsInterceptMissionInfo &info)
 				const int nAim9=air->Prop().GetNumWeapon(FSWEAPON_AIM9);
 				const int nAim9x=air->Prop().GetNumWeapon(FSWEAPON_AIM9X);
 				const int nAim120=air->Prop().GetNumWeapon(FSWEAPON_AIM120);
-				YsString reloadCommand[5];
+				const int nAim54=air->Prop().GetNumWeapon(FSWEAPON_AIM54);
+				YsString reloadCommand[6];
 				reloadCommand[0]="UNLOADWP";
 				reloadCommand[1]="LOADWEPN IFLR 20";
 				reloadCommand[2].Printf("LOADWEPN AIM120 %d",nAim120);
 				reloadCommand[3].Printf("LOADWEPN AIM9 %d",nAim9);
 				reloadCommand[4].Printf("LOADWEPN AIM9X %d",nAim9x);
+				reloadCommand[5].Printf("LOADWEPN AIM54 %d",nAim54);
 				for(auto &cmd : reloadCommand)
 				{
 					air->AddReloadCommand(cmd);
@@ -3908,6 +3914,17 @@ void FsSimulation::SimMove(const double &dt)
 				case FSWEAPON_BOMB:
 				case FSWEAPON_BOMB500HD:
 				case FSWEAPON_BOMB250:
+					FsSoundSetOneTime(FSSND_ONETIME_BOMBSAWAY);
+					break;
+				case FSWEAPON_AIM54:
+					FsSoundSetOneTime(FSSND_ONETIME_MISSILE);
+					break;
+				case FSWEAPON_AGM84:
+				case FSWEAPON_AGM88:
+				case FSWEAPON_CANNON:
+					FsSoundSetOneTime(FSSND_ONETIME_ROCKET);
+					break;
+				case FSWEAPON_GBU28:
 					FsSoundSetOneTime(FSSND_ONETIME_BOMBSAWAY);
 					break;
 				};
@@ -6098,6 +6115,8 @@ void FsSimulation::SimMakeUpCockpitIndicationSet(class FsCockpitIndicationSet &c
 	int extFuel=0,extFuelLeft=0;
 	int flare=0;
 
+	int aim54=0,agm84=0,agm88=0,gbu28=0,cannon=0;
+
 	for(int i=0; i<=loading.GetN()-2; i+=2)
 	{
 		switch(loading[i])
@@ -6139,6 +6158,21 @@ void FsSimulation::SimMakeUpCockpitIndicationSet(class FsCockpitIndicationSet &c
 		case FSWEAPON_FUELTANK:
 			extFuel++;
 			extFuelLeft+=loading[i+1];
+			break;
+		case FSWEAPON_AIM54:
+			aim54+=loading[i+1];
+			break;
+		case FSWEAPON_AGM84:
+			agm84+=loading[i+1];
+			break;
+		case FSWEAPON_AGM88:
+			agm88+=loading[i+1];
+			break;
+		case FSWEAPON_GBU28:
+			gbu28+=loading[i+1];
+			break;
+		case FSWEAPON_CANNON:
+			cannon+=loading[i+1];
 			break;
 		}
 	}
@@ -6304,6 +6338,67 @@ void FsSimulation::SimMakeUpCockpitIndicationSet(class FsCockpitIndicationSet &c
 		cockpitIndicationSet.ammo.ammoArray.Last().maxQuantity=0;
 		cockpitIndicationSet.ammo.ammoArray.Last().channel=smokeSelector;
 		cockpitIndicationSet.ammo.ammoArray.Last().availableChannel=smokeAvailable;
+	}
+
+	if(aim54>0 || woc==FSWEAPON_AIM54)
+	{
+		cockpitIndicationSet.ammo.ammoArray.Increment();
+		cockpitIndicationSet.ammo.ammoArray.Last().wpnType=FsAmmunitionIndication::WPNTYPE_AIM54;
+		cockpitIndicationSet.ammo.ammoArray.Last().selected=(woc==FSWEAPON_AIM54 ? YSTRUE : YSFALSE);
+		cockpitIndicationSet.ammo.ammoArray.Last().quantity=aim54;
+		cockpitIndicationSet.ammo.ammoArray.Last().maxQuantity=0;
+		cockpitIndicationSet.ammo.ammoArray.Last().level=0;
+		cockpitIndicationSet.ammo.ammoArray.Last().standByTimer=samInterval;
+		cockpitIndicationSet.ammo.ammoArray.Last().channel=0;;
+		cockpitIndicationSet.ammo.ammoArray.Last().availableChannel=0;;
+	}
+	if(agm84>0 || woc==FSWEAPON_AGM84)
+	{
+		cockpitIndicationSet.ammo.ammoArray.Increment();
+		cockpitIndicationSet.ammo.ammoArray.Last().wpnType=FsAmmunitionIndication::WPNTYPE_AGM84;
+		cockpitIndicationSet.ammo.ammoArray.Last().selected=(woc==FSWEAPON_AGM84 ? YSTRUE : YSFALSE);
+		cockpitIndicationSet.ammo.ammoArray.Last().quantity=agm84;
+		cockpitIndicationSet.ammo.ammoArray.Last().maxQuantity=0;
+		cockpitIndicationSet.ammo.ammoArray.Last().level=0;
+		cockpitIndicationSet.ammo.ammoArray.Last().standByTimer=samInterval;
+		cockpitIndicationSet.ammo.ammoArray.Last().channel=0;;
+		cockpitIndicationSet.ammo.ammoArray.Last().availableChannel=0;;
+	}
+	if(agm88>0 || woc==FSWEAPON_AGM88)
+	{
+		cockpitIndicationSet.ammo.ammoArray.Increment();
+		cockpitIndicationSet.ammo.ammoArray.Last().wpnType=FsAmmunitionIndication::WPNTYPE_AGM88;
+		cockpitIndicationSet.ammo.ammoArray.Last().selected=(woc==FSWEAPON_AGM88 ? YSTRUE : YSFALSE);
+		cockpitIndicationSet.ammo.ammoArray.Last().quantity=agm88;
+		cockpitIndicationSet.ammo.ammoArray.Last().maxQuantity=0;
+		cockpitIndicationSet.ammo.ammoArray.Last().level=0;
+		cockpitIndicationSet.ammo.ammoArray.Last().standByTimer=samInterval;
+		cockpitIndicationSet.ammo.ammoArray.Last().channel=0;;
+		cockpitIndicationSet.ammo.ammoArray.Last().availableChannel=0;;
+	}
+	if(gbu28>0 || woc==FSWEAPON_GBU28)
+	{
+		cockpitIndicationSet.ammo.ammoArray.Increment();
+		cockpitIndicationSet.ammo.ammoArray.Last().wpnType=FsAmmunitionIndication::WPNTYPE_GBU28;
+		cockpitIndicationSet.ammo.ammoArray.Last().selected=(woc==FSWEAPON_GBU28 ? YSTRUE : YSFALSE);
+		cockpitIndicationSet.ammo.ammoArray.Last().quantity=gbu28;
+		cockpitIndicationSet.ammo.ammoArray.Last().maxQuantity=0;
+		cockpitIndicationSet.ammo.ammoArray.Last().level=0;
+		cockpitIndicationSet.ammo.ammoArray.Last().standByTimer=samInterval;
+		cockpitIndicationSet.ammo.ammoArray.Last().channel=0;;
+		cockpitIndicationSet.ammo.ammoArray.Last().availableChannel=0;;
+	}
+	if(cannon>0 || woc==FSWEAPON_CANNON)
+	{
+		cockpitIndicationSet.ammo.ammoArray.Increment();
+		cockpitIndicationSet.ammo.ammoArray.Last().wpnType=FsAmmunitionIndication::WPNTYPE_CANNON;
+		cockpitIndicationSet.ammo.ammoArray.Last().selected=(woc==FSWEAPON_CANNON ? YSTRUE : YSFALSE);
+		cockpitIndicationSet.ammo.ammoArray.Last().quantity=cannon;
+		cockpitIndicationSet.ammo.ammoArray.Last().maxQuantity=0;
+		cockpitIndicationSet.ammo.ammoArray.Last().level=0;
+		cockpitIndicationSet.ammo.ammoArray.Last().standByTimer=samInterval;
+		cockpitIndicationSet.ammo.ammoArray.Last().channel=0;;
+		cockpitIndicationSet.ammo.ammoArray.Last().availableChannel=0;;
 	}
 }
 
@@ -8032,6 +8127,17 @@ void FsSimulation::SimDrawRadar(const ActualViewMode &actualViewMode) const
 			case FSWEAPON_BOMB500HD:
 				radar.Draw(this,x1,y1,x2,y2,radarRange,*GetPlayerAirplane(),1,cfgPtr->radarAltitudeLimit);
 				break;
+			case FSWEAPON_AIM54:
+			case FSWEAPON_CANNON:
+				radar.Draw(this,x1,y1,x2,y2,radarRange,*GetPlayerAirplane(),0,cfgPtr->radarAltitudeLimit);
+				break;
+			case FSWEAPON_AGM84:
+			case FSWEAPON_AGM88:
+				radar.Draw(this,x1,y1,x2,y2,radarRange,*GetPlayerAirplane(),1,cfgPtr->radarAltitudeLimit);
+				break;
+			case FSWEAPON_GBU28:
+				radar.Draw(this,x1,y1,x2,y2,radarRange,*GetPlayerAirplane(),2,cfgPtr->radarAltitudeLimit);
+				break;
 			}
 		}
 	}
@@ -8625,6 +8731,28 @@ void FsSimulation::SimDrawContainer(const ActualViewMode &actualViewMode) const
 						hud->DrawCircleContainer(mat,viewAttitude,*trg,*trg,YsYellow(),"",NULL,YSFALSE,90,90);
 					}
 				}
+				else if((woc==FSWEAPON_AIM54) &&
+				    air->SearchKey()==airTargetKey)
+				{
+					double distance;
+					distance=(air->GetPosition()-playerObj->GetPosition()).GetLength();
+
+					if(distance<range/5.0)
+					{
+						hud->DrawCrossDesignator
+							(mat,viewAttitude,*trg,*trg,YsYellow(),YSFALSE);
+					}
+					else if(distance<range/2.0)
+					{
+						const YsColor *col;
+						col=(int(currentTime*2.0)&1 ? &YsRed() : &hud->hudCol);
+						hud->DrawCircleContainer(mat,viewAttitude,*trg,*trg,*col,"",NULL,YSFALSE,90,90);
+					}
+					else
+					{
+						hud->DrawCircleContainer(mat,viewAttitude,*trg,*trg,YsYellow(),"",NULL,YSFALSE,90,90);
+					}
+				}
 			}
 		}
 
@@ -8639,6 +8767,31 @@ void FsSimulation::SimDrawContainer(const ActualViewMode &actualViewMode) const
 				double distance;
 				distance=(gnd->GetPosition()-playerPlane->GetPosition()).GetLength();
 				if(distance<playerPlane->Prop().GetAGMRange())
+				{
+					const YsColor *col;
+					col=(int(currentTime*2.0)&1 ? &YsRed() : &hud->hudCol);
+					hud->DrawCircleContainer
+					    (mat,viewAttitude,gnd->GetPosition(),gnd->GetPosition(),*col,"SHOOT",NULL,YSFALSE,45,90);
+				}
+				else
+				{
+					hud->DrawCircleContainer
+					    (mat,viewAttitude,gnd->GetPosition(),gnd->GetPosition(),YsYellow(),"",NULL,YSFALSE,45,90);
+				}
+			}
+			else if(gnd!=NULL &&
+			   (playerPlane->Prop().GetWeaponOfChoice()==FSWEAPON_AGM84 ||
+			    playerPlane->Prop().GetWeaponOfChoice()==FSWEAPON_AGM88))
+			{
+				double distance,range;
+				distance=(gnd->GetPosition()-playerPlane->GetPosition()).GetLength();
+				range=playerPlane->Prop().GetAGMRange(playerPlane->Prop().GetWeaponOfChoice());
+				if(distance<range/10.0)
+				{
+					hud->DrawCrossDesignator
+					    (mat,viewAttitude,*trg,*trg,YsYellow(),YSFALSE);
+				}
+				else if(distance<range)
 				{
 					const YsColor *col;
 					col=(int(currentTime*2.0)&1 ? &YsRed() : &hud->hudCol);
@@ -8829,7 +8982,8 @@ void FsSimulation::SimDrawBombingAim(const ActualViewMode &actualViewMode) const
 
 	if(playerPlane!=NULL &&
 	   (playerPlane->Prop().GetWeaponOfChoice()==FSWEAPON_BOMB ||
-	    playerPlane->Prop().GetWeaponOfChoice()==FSWEAPON_BOMB250) &&
+	    playerPlane->Prop().GetWeaponOfChoice()==FSWEAPON_BOMB250 ||
+	    playerPlane->Prop().GetWeaponOfChoice()==FSWEAPON_GBU28) &&
 	   ((fabs(userInput.viewHdg)< YsDegToRad( 10.0) && fabs(userInput.viewPch)< YsDegToRad( 10.0)) ||
 	    actualViewMode.actualViewMode==FSBOMBINGVIEW))
 	{
@@ -10421,9 +10575,14 @@ void FsSimulation::SimDecideViewpoint_Air(ActualViewMode &actualViewMode,FSVIEWM
 			if(playerPlane->Prop().GetWeaponOfChoice()==FSWEAPON_AIM9 ||
 			   playerPlane->Prop().GetWeaponOfChoice()==FSWEAPON_AIM9X ||
 			   playerPlane->Prop().GetWeaponOfChoice()==FSWEAPON_AIM120 ||
-			   playerPlane->Prop().GetWeaponOfChoice()==FSWEAPON_AGM65)
+			   playerPlane->Prop().GetWeaponOfChoice()==FSWEAPON_AGM65 ||
+			   playerPlane->Prop().GetWeaponOfChoice()==FSWEAPON_AIM54 ||
+			   playerPlane->Prop().GetWeaponOfChoice()==FSWEAPON_AGM84 ||
+			   playerPlane->Prop().GetWeaponOfChoice()==FSWEAPON_AGM88)
 			{
-				if(playerPlane->Prop().GetWeaponOfChoice()==FSWEAPON_AGM65)
+				if(playerPlane->Prop().GetWeaponOfChoice()==FSWEAPON_AGM65 ||
+				   playerPlane->Prop().GetWeaponOfChoice()==FSWEAPON_AGM84 ||
+				   playerPlane->Prop().GetWeaponOfChoice()==FSWEAPON_AGM88)
 				{
 					trg=FindGround(playerPlane->Prop().GetGroundTargetKey());
 				}
@@ -10837,11 +10996,16 @@ void FsSimulation::SimDecideViewpoint_Gnd(ActualViewMode &actualViewMode,FSVIEWM
 			if(playerGround->GetWeaponOfChoice()==FSWEAPON_AIM9 ||
 			   playerGround->GetWeaponOfChoice()==FSWEAPON_AIM9X ||
 			   playerGround->GetWeaponOfChoice()==FSWEAPON_AIM120 ||
-			   playerGround->GetWeaponOfChoice()==FSWEAPON_AGM65)
+			   playerGround->GetWeaponOfChoice()==FSWEAPON_AGM65 ||
+			   playerGround->GetWeaponOfChoice()==FSWEAPON_AIM54 ||
+			   playerGround->GetWeaponOfChoice()==FSWEAPON_AGM84 ||
+			   playerGround->GetWeaponOfChoice()==FSWEAPON_AGM88)
 			{
 				actualViewMode.viewAttitude=playerGround->Prop().GetSamAim();
 
-				if(playerGround->Prop().GetWeaponOfChoice()==FSWEAPON_AGM65)
+				if(playerGround->GetWeaponOfChoice()==FSWEAPON_AGM65 ||
+				   playerGround->GetWeaponOfChoice()==FSWEAPON_AGM84 ||
+				   playerGround->GetWeaponOfChoice()==FSWEAPON_AGM88)
 				{
 					trg=playerGround->Prop().GetGroundTarget();
 				}

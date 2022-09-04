@@ -238,6 +238,76 @@ void FsWeapon::Draw(
 				fsWeaponGraphicCache->triVtxNomBuf.AddNormal(nom);
 			}
 			break;
+		case FSWEAPON_AIM54:
+			if(lifeRemain>YsTolerance)
+			{
+				// glDisable(GL_CULL_FACE); Do I have to?
+				if(coarse!=YSTRUE && aim54!=NULL)
+				{
+					aim54.Draw(viewMat,projMat,pos,att,drawFlag);
+				}
+				else if(coarse==YSTRUE && aim54_coarse!=NULL)
+				{
+					aim54_coarse.Draw(viewMat,projMat,pos,att,drawFlag);
+				}
+			}
+			break;
+		case FSWEAPON_AGM84:
+			if(lifeRemain>YsTolerance)
+			{
+				// glDisable(GL_CULL_FACE); Do I have to?
+				if(coarse!=YSTRUE && agm84!=NULL)
+				{
+					agm84.Draw(viewMat,projMat,pos,att,drawFlag);
+				}
+				else if(coarse==YSTRUE && agm84_coarse!=NULL)
+				{
+					agm84_coarse.Draw(viewMat,projMat,pos,att,drawFlag);
+				}
+			}
+			break;
+		case FSWEAPON_AGM88:
+			if(lifeRemain>YsTolerance)
+			{
+				// glDisable(GL_CULL_FACE); Do I have to?
+				if(coarse!=YSTRUE && agm88!=NULL)
+				{
+					agm88.Draw(viewMat,projMat,pos,att,drawFlag);
+				}
+				else if(coarse==YSTRUE && agm88_coarse!=NULL)
+				{
+					agm88_coarse.Draw(viewMat,projMat,pos,att,drawFlag);
+				}
+			}
+			break;
+		case FSWEAPON_GBU28:
+			if(lifeRemain>YsTolerance)
+			{
+				// glDisable(GL_CULL_FACE); Do I have to?
+				if(coarse!=YSTRUE && gbu28!=NULL)
+				{
+					gbu28.Draw(viewMat,projMat,pos,att,drawFlag);
+				}
+				else if(coarse==YSTRUE && gbu28_coarse!=NULL)
+				{
+					gbu28_coarse.Draw(viewMat,projMat,pos,att,drawFlag);
+				}
+			}
+			break;
+		case FSWEAPON_CANNON:
+			if(lifeRemain>YsTolerance)
+			{
+				// glDisable(GL_CULL_FACE); Do I have to?
+				if(coarse!=YSTRUE && cannon!=NULL)
+				{
+					cannon.Draw(viewMat,projMat,pos,att,drawFlag);
+				}
+				else if(coarse==YSTRUE && cannon_coarse!=NULL)
+				{
+					cannon_coarse.Draw(viewMat,projMat,pos,att,drawFlag);
+				}
+			}
+			break;
 		}
 
 		if(FSSMKNULL!=smk &&

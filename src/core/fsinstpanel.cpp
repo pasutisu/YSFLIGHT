@@ -3841,6 +3841,21 @@ void FsInstrumentPanel::DrawAmmo3d(int nGun,int maxNGun,FSWEAPONTYPE wpnType,int
 	case FSWEAPON_FUELTANK:
 		sprintf(str,"TANK%d",wpnLeft);
 		break;
+    case FSWEAPON_AIM54:
+		sprintf(str,"AAM(L) %d",wpnLeft);
+		break;
+    case FSWEAPON_AGM84:
+		sprintf(str,"ASM %d",wpnLeft);
+		break;
+    case FSWEAPON_AGM88:
+		sprintf(str,"ARM %d",wpnLeft);
+		break;
+    case FSWEAPON_GBU28:
+		sprintf(str,"BOM5000 %d",wpnLeft);
+		break;
+    case FSWEAPON_CANNON:
+		sprintf(str,"CANNON %d",wpnLeft);
+		break;
 	}
 
 	//YsGLCopyMatrixfv(tfm,prevTfm);

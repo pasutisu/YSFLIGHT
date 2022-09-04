@@ -632,7 +632,8 @@ public:
 	YSBOOL SetAirTargetKey(unsigned int airKey);
 	unsigned int GetAirTargetKey(void) const;
 	const double & GetAGMRadarAngle(void) const;
-	const double & GetAGMRange(void) const;
+	const double & GetAGMRange() const;
+	const double GetAGMRange(FSWEAPONTYPE wpnType) const;
 	int GetAGMDestructivePower(void) const;
 	const double & GetRocketRange(void) const;
 	YSBOOL SetGroundTargetKey(unsigned int gndKey);

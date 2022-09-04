@@ -114,6 +114,12 @@ $BGCOL 0
 +airdlg/ww2bomber                                  #第2次大戦爆撃機
 +airdlg/ww2divebomber                              #第2次大戦急降下爆撃機
 
++airdlg/aim54                                      #長射程空対空ミサイル
++airdlg/agm84                                      #空対艦ミサイル
++airdlg/agm88                                      #対レーダーミサイル
++airdlg/gbu28                                      #5000ポンド爆弾
++airdlg/cannon                                     #大口径砲弾
+
 +aircombatdlg/noplayerplane                        #使用する航空機を選択してください。
 
 +newfltdlg/createnewflight                         #=== フライトの新規作成 ===

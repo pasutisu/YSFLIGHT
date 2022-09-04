@@ -75,6 +75,12 @@ FsChoose::FsChoose(int n) : fullChoice(fullChoiceAllocator), filterList(fullChoi
 	rocket=0;
 	fuel=75;
 
+	aim54=0;
+	agm84=0;
+	agm88=0;
+	gbu28=0;
+	cannon=0;
+
 	allowAam=YSTRUE;
 	allowAgm=YSTRUE;
 	allowBomb=YSTRUE;
@@ -261,6 +267,13 @@ YSRESULT FsChoose::ResetOrdinanceOfAirplane(void)
 		bomb500hd=tmpl->GetProperty()->GetNumWeapon(FSWEAPON_BOMB500HD);
 		rocket=tmpl->GetProperty()->GetNumWeapon(FSWEAPON_ROCKET);
 		smk=(tmpl->GetProperty()->GetSmokeOil()>YsTolerance ? YSTRUE : YSFALSE);
+
+		aim54=tmpl->GetProperty()->GetNumWeapon(FSWEAPON_AIM54);
+		agm84=tmpl->GetProperty()->GetNumWeapon(FSWEAPON_AGM84);
+		agm88=tmpl->GetProperty()->GetNumWeapon(FSWEAPON_AGM88);
+		gbu28=tmpl->GetProperty()->GetNumWeapon(FSWEAPON_GBU28);
+		cannon=tmpl->GetProperty()->GetNumWeapon(FSWEAPON_CANNON);
+
 		tmpl->GetProperty()->GetWeaponConfig(weaponConfig);
 
 		ApplyWeaponLimit(weaponConfig);
@@ -277,6 +290,12 @@ YSRESULT FsChoose::ResetOrdinanceOfAirplane(void)
 		bomb250=prop.GetNumWeapon(FSWEAPON_BOMB250);
 		bomb500hd=prop.GetNumWeapon(FSWEAPON_BOMB500HD);
 		rocket=prop.GetNumWeapon(FSWEAPON_ROCKET);
+
+		aim54=prop.GetNumWeapon(FSWEAPON_AIM54);
+		agm84=prop.GetNumWeapon(FSWEAPON_AGM84);
+		agm88=prop.GetNumWeapon(FSWEAPON_AGM88);
+		gbu28=prop.GetNumWeapon(FSWEAPON_GBU28);
+		cannon=prop.GetNumWeapon(FSWEAPON_CANNON);
 
 		// prop.ShowSlotConfig();
 
@@ -309,6 +328,26 @@ void FsChoose::ApplyWeaponLimit(YsArray <int,64> &weaponConfig)
 			weaponConfig.Delete(i);
 		}
 		else if(allowRocket!=YSTRUE && (wpnType==FSWEAPON_ROCKET))
+		{
+			weaponConfig.Delete(i);
+			weaponConfig.Delete(i);
+		}
+		else if(allowAam!=YSTRUE && (wpnType==FSWEAPON_AIM54))
+		{
+			weaponConfig.Delete(i);
+			weaponConfig.Delete(i);
+		}
+		else if(allowAgm!=YSTRUE && (wpnType==FSWEAPON_AGM84 || wpnType==FSWEAPON_AGM88))
+		{
+			weaponConfig.Delete(i);
+			weaponConfig.Delete(i);
+		}
+		else if(allowBomb!=YSTRUE && (wpnType==FSWEAPON_GBU28))
+		{
+			weaponConfig.Delete(i);
+			weaponConfig.Delete(i);
+		}
+		else if(allowRocket!=YSTRUE && (wpnType==FSWEAPON_CANNON))
 		{
 			weaponConfig.Delete(i);
 			weaponConfig.Delete(i);
@@ -1103,6 +1142,12 @@ void FsChoose::AddRemoveLoading(FSWEAPONTYPE wpnType,int addRemove)
 			bomb250=prop.GetNumWeapon(FSWEAPON_BOMB250);
 			bomb500hd=prop.GetNumWeapon(FSWEAPON_BOMB500HD);
 
+			aim54=prop.GetNumWeapon(FSWEAPON_AIM54);
+			agm84=prop.GetNumWeapon(FSWEAPON_AGM84);
+			agm88=prop.GetNumWeapon(FSWEAPON_AGM88);
+			gbu28=prop.GetNumWeapon(FSWEAPON_GBU28);
+			cannon=prop.GetNumWeapon(FSWEAPON_CANNON);
+
 			// prop.ShowSlotConfig();
 		}
 	}
@@ -1135,6 +1180,15 @@ YSBOOL FsChoose::IsWeaponAvailable(FSWEAPONTYPE wpnType)
 		case FSWEAPON_BOMB500HD:
 			return allowBomb;
 		case FSWEAPON_ROCKET:
+			return allowRocket;
+		case FSWEAPON_AIM54:
+			return allowAam;
+		case FSWEAPON_AGM84:
+		case FSWEAPON_AGM88:
+			return allowAgm;
+		case FSWEAPON_GBU28:
+			return allowBomb;
+		case FSWEAPON_CANNON:
 			return allowRocket;
 		}
 
@@ -2205,6 +2259,12 @@ void FsGuiChooseAircraft::Initialize(void)
 	fuelNbx=NULL;
 	smkBtn=NULL;
 
+	aim54Nbx=NULL;
+	agm84Nbx=NULL;
+	agm88Nbx=NULL;
+	gbu28Nbx=NULL;
+	cannonNbx=NULL;
+
 	catNormal=NULL;
 	catUtility=NULL;
 	catAerobatic=NULL;
@@ -2367,6 +2427,26 @@ void FsGuiChooseAircraft::OnNumberBoxChange(FsGuiNumberBox *nbx,int /*prevNum*/)
 	{
 		ChangeLoading(FSWEAPON_FUELTANK,fuelTankNbx->GetNumber());
 	}
+	if(aim54Nbx==nbx)
+	{
+		ChangeLoading(FSWEAPON_AIM54,aim54Nbx->GetNumber());
+	}
+	if(agm84Nbx==nbx)
+	{
+		ChangeLoading(FSWEAPON_AGM84,agm84Nbx->GetNumber());
+	}
+	if(agm88Nbx==nbx)
+	{
+		ChangeLoading(FSWEAPON_AGM88,agm88Nbx->GetNumber());
+	}
+	if(gbu28Nbx==nbx)
+	{
+		ChangeLoading(FSWEAPON_GBU28,gbu28Nbx->GetNumber());
+	}
+	if(cannonNbx==nbx)
+	{
+		ChangeLoading(FSWEAPON_CANNON,cannonNbx->GetNumber());
+	}
 }
 
 YSRESULT FsGuiChooseAircraft::Create(FsWorld *world,const FsGuiChooseAircraftOption &option,int nextActionCode)
@@ -2409,7 +2489,15 @@ YSRESULT FsGuiChooseAircraft::Create(FsWorld *world,const FsGuiChooseAircraftOpt
 
 	bom500HdNbx=AddNumberBox(0,FSKEY_NULL,FSGUI_AIRDLG_BOM500HD,18,0,0,100,1,YSTRUE);
 	fuelTankNbx=AddNumberBox(0,FSKEY_NULL,FSGUI_AIRDLG_FUELTANK,18,0,0,100,1,YSFALSE);
-	
+
+	aim54Nbx=AddNumberBox(0,FSKEY_NULL,FSGUI_AIRDLG_AIM54,18,0,0,100,1,YSTRUE);
+	agm84Nbx=AddNumberBox(0,FSKEY_NULL,FSGUI_AIRDLG_AGM84,18,0,0,100,1,YSFALSE);
+
+	agm88Nbx=AddNumberBox(0,FSKEY_NULL,FSGUI_AIRDLG_AGM88,18,0,0,100,1,YSTRUE);
+	gbu28Nbx=AddNumberBox(0,FSKEY_NULL,FSGUI_AIRDLG_GBU28,18,0,0,100,1,YSFALSE);
+
+	cannonNbx=AddNumberBox(0,FSKEY_NULL,FSGUI_AIRDLG_CANNON,18,0,0,100,1,YSTRUE);
+
 	fuelNbx=AddNumberBox(11,FSKEY_NULL,FSGUI_AIRDLG_FUEL,18,75,0,100,5,YSTRUE);
 	smkBtn=AddTextButton(12,FSKEY_NULL,FSGUI_CHECKBOX,FSGUI_AIRDLG_SMOKE,YSTRUE);
 	sameSmkColBtn=AddTextButton(0,FSKEY_NULL,FSGUI_CHECKBOX,FSGUI_AIRDLG_SMOKE_SAMECOLOR,YSFALSE);
@@ -2568,6 +2656,11 @@ void FsGuiChooseAircraft::EnableAamButton(void)
 	{
 		aim9xNbx->Enable();
 	}
+
+	if(aim54Nbx!=NULL)
+	{
+		aim54Nbx->Enable();
+	}
 }
 
 void FsGuiChooseAircraft::DisableAamButton(void)
@@ -2584,6 +2677,11 @@ void FsGuiChooseAircraft::DisableAamButton(void)
 	{
 		aim9xNbx->Disable();
 	}
+
+	if(aim54Nbx!=NULL)
+	{
+		aim54Nbx->Disable();
+	}
 }
 
 
@@ -2593,6 +2691,15 @@ void FsGuiChooseAircraft::EnableAgmButton(void)
 	{
 		agmNbx->Enable();
 	}
+
+	if(agm84Nbx!=NULL)
+	{
+		agm84Nbx->Enable();
+	}
+	if(agm88Nbx!=NULL)
+	{
+		agm88Nbx->Enable();
+	}
 }
 
 void FsGuiChooseAircraft::DisableAgmButton(void)
@@ -2600,6 +2707,15 @@ void FsGuiChooseAircraft::DisableAgmButton(void)
 	if(agmNbx!=NULL)
 	{
 		agmNbx->Disable();
+	}
+
+	if(agm84Nbx!=NULL)
+	{
+		agm84Nbx->Disable();
+	}
+	if(agm88Nbx!=NULL)
+	{
+		agm88Nbx->Disable();
 	}
 }
 
@@ -2617,6 +2733,11 @@ void FsGuiChooseAircraft::EnableBombButton(void)
 	{
 		bom500HdNbx->Enable();
 	}
+
+	if(gbu28Nbx!=NULL)
+	{
+		gbu28Nbx->Enable();
+	}
 }
 
 void FsGuiChooseAircraft::DisableBombButton(void)
@@ -2633,6 +2754,11 @@ void FsGuiChooseAircraft::DisableBombButton(void)
 	{
 		bom500HdNbx->Disable();
 	}
+
+	if(gbu28Nbx!=NULL)
+	{
+		gbu28Nbx->Disable();
+	}
 }
 
 void FsGuiChooseAircraft::EnableRocketButton(void)
@@ -2641,6 +2767,11 @@ void FsGuiChooseAircraft::EnableRocketButton(void)
 	{
 		rktNbx->Enable();
 	}
+
+	if(cannonNbx!=NULL)
+	{
+		cannonNbx->Enable();
+	}
 }
 
 void FsGuiChooseAircraft::DisableRocketButton(void)
@@ -2648,6 +2779,11 @@ void FsGuiChooseAircraft::DisableRocketButton(void)
 	if(rktNbx!=NULL)
 	{
 		rktNbx->Disable();
+	}
+
+	if(cannonNbx!=NULL)
+	{
+		cannonNbx->Disable();
 	}
 }
 
@@ -2916,6 +3052,12 @@ void FsGuiChooseAircraft::ChangeLoading(FSWEAPONTYPE wpnType,int n)
 			bom250Nbx->SetNumber(prop.GetNumWeapon(FSWEAPON_BOMB250));
 			bom500HdNbx->SetNumber(prop.GetNumWeapon(FSWEAPON_BOMB500HD));
 
+			aim54Nbx->SetNumber(prop.GetNumWeapon(FSWEAPON_AIM54));
+			agm84Nbx->SetNumber(prop.GetNumWeapon(FSWEAPON_AGM84));
+			agm88Nbx->SetNumber(prop.GetNumWeapon(FSWEAPON_AGM88));
+			gbu28Nbx->SetNumber(prop.GetNumWeapon(FSWEAPON_GBU28));
+			cannonNbx->SetNumber(prop.GetNumWeapon(FSWEAPON_CANNON));
+
 			// prop.ShowSlotConfig();
 		}
 	}
@@ -2945,6 +3087,26 @@ void FsGuiChooseAircraft::ApplyWeaponLimit(YsArray <int,64> &weaponConfig)
 			weaponConfig.Delete(i);
 		}
 		else if(allowRocket!=YSTRUE && (wpnType==FSWEAPON_ROCKET))
+		{
+			weaponConfig.Delete(i);
+			weaponConfig.Delete(i);
+		}
+		else if(allowAam!=YSTRUE && (wpnType==FSWEAPON_AIM54))
+		{
+			weaponConfig.Delete(i);
+			weaponConfig.Delete(i);
+		}
+		else if(allowAgm!=YSTRUE && (wpnType==FSWEAPON_AGM84 || wpnType==FSWEAPON_AGM88))
+		{
+			weaponConfig.Delete(i);
+			weaponConfig.Delete(i);
+		}
+		else if(allowBomb!=YSTRUE && (wpnType==FSWEAPON_GBU28))
+		{
+			weaponConfig.Delete(i);
+			weaponConfig.Delete(i);
+		}
+		else if(allowRocket!=YSTRUE && (wpnType==FSWEAPON_CANNON))
 		{
 			weaponConfig.Delete(i);
 			weaponConfig.Delete(i);
@@ -3104,6 +3266,41 @@ void FsGuiChooseAircraft::SetOrdinanceByAirplaneProp(const FsAirplaneProperty &p
 		smkCpl[smkIdx]->Disable();
 	}
 
+	if(aim54Nbx!=NULL)
+	{
+		num=prop.GetNumWeapon(FSWEAPON_AIM54);
+		max=prop.GetMaxNumWeapon(FSWEAPON_AIM54);
+		aim54Nbx->SetNumberAndRange(num,0,max,1);
+	}
+
+	if(agm84Nbx!=NULL)
+	{
+		num=prop.GetNumWeapon(FSWEAPON_AGM84);
+		max=prop.GetMaxNumWeapon(FSWEAPON_AGM84);
+		agm84Nbx->SetNumberAndRange(num,0,max,1);
+	}
+
+	if(agm88Nbx!=NULL)
+	{
+		num=prop.GetNumWeapon(FSWEAPON_AGM88);
+		max=prop.GetMaxNumWeapon(FSWEAPON_AGM88);
+		agm88Nbx->SetNumberAndRange(num,0,max,1);
+	}
+
+	if(gbu28Nbx!=NULL)
+	{
+		num=prop.GetNumWeapon(FSWEAPON_GBU28);
+		max=prop.GetMaxNumWeapon(FSWEAPON_GBU28);
+		gbu28Nbx->SetNumberAndRange(num,0,max,1);
+	}
+
+	if(cannonNbx!=NULL)
+	{
+		num=prop.GetNumWeapon(FSWEAPON_CANNON);
+		max=prop.GetMaxNumWeapon(FSWEAPON_CANNON);
+		cannonNbx->SetNumberAndRange(num,0,max,1);
+	}
+
 
 	if(allowAam!=YSTRUE)
 	{
@@ -3119,12 +3316,26 @@ void FsGuiChooseAircraft::SetOrdinanceByAirplaneProp(const FsAirplaneProperty &p
 		{
 			aim9xNbx->SetNumberAndRange(0,0,0,0);
 		}
+
+		if(aim54Nbx!=NULL)
+		{
+			aim54Nbx->SetNumberAndRange(0,0,0,0);
+		}
 	}
 	if(allowAgm!=YSTRUE)
 	{
 		if(agmNbx!=NULL)
 		{
 			agmNbx->SetNumberAndRange(0,0,0,0);
+		}
+
+		if(agm84Nbx!=NULL)
+		{
+			agm84Nbx->SetNumberAndRange(0,0,0,0);
+		}
+		if(agm88Nbx!=NULL)
+		{
+			agm88Nbx->SetNumberAndRange(0,0,0,0);
 		}
 	}
 	if(allowBomb!=YSTRUE)
@@ -3141,12 +3352,22 @@ void FsGuiChooseAircraft::SetOrdinanceByAirplaneProp(const FsAirplaneProperty &p
 		{
 			bom500HdNbx->SetNumberAndRange(0,0,0,0);
 		}
+
+		if(gbu28Nbx!=NULL)
+		{
+			gbu28Nbx->SetNumberAndRange(0,0,0,0);
+		}
 	}
 	if(allowRocket!=YSTRUE)
 	{
 		if(rktNbx!=NULL)
 		{
 			rktNbx->SetNumberAndRange(0,0,0,0);
+		}
+
+		if(cannonNbx!=NULL)
+		{
+			cannonNbx->SetNumberAndRange(0,0,0,0);
 		}
 	}
 

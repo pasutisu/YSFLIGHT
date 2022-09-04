@@ -19,6 +19,7 @@ public:
 
 	// For choosing airplane
 	int aam,aim9x,aim120,agm,bomb,bomb250,bomb500hd,rocket;
+	int aim54,agm84,agm88,gbu28,cannon;
 	YSBOOL allowAam,allowAgm,allowBomb,allowRocket;
 	YSBOOL smk;
 	YsColor smkCol;
@@ -211,6 +212,7 @@ public:
 	FsGuiTextBox *searchTxt;
 	FsGuiButton *okBtn,*cancelBtn;
 	FsGuiNumberBox *aamSrNbx,*aim9xNbx,*aamMrNbx,*agmNbx,*bom500Nbx,*bom250Nbx,*bom500HdNbx,*rktNbx,*fuelNbx;
+	FsGuiNumberBox *aim54Nbx,*agm84Nbx,*agm88Nbx,*gbu28Nbx,*cannonNbx;
 	FsGuiNumberBox *flarePodNbx,*fuelTankNbx;
 	FsGuiButton *smkBtn,*sameSmkColBtn;
 	FsGuiColorPalette *smkCpl[FsAirplaneProperty::MaxNumSmokeGenerator];

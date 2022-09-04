@@ -118,6 +118,12 @@ public:
 	static class FsVisualDnm bomb250,bomb250s,bomb250_coarse;  // 2004/01/22
 	static class FsVisualDnm bomb500hd,bomb500hds,bomb500hd_coarse;  // 2004/01/22
 
+	static class FsVisualDnm aim54,aim54s,aim54_coarse;
+	static class FsVisualDnm agm84,agm84s,agm84_coarse;
+	static class FsVisualDnm agm88,agm88s,agm88_coarse;
+	static class FsVisualDnm gbu28,gbu28s,gbu28_coarse;
+	static class FsVisualDnm cannon,cannons,cannon_coarse;
+
 	static class FsVisualDnm flarePod;
 	static class FsVisualDnm fuelTank;
 

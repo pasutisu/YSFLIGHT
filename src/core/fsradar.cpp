@@ -259,6 +259,18 @@ void FsHorizontalRadar::DrawBasic(
 			{
 				col=YsYellow();
 			}
+			else if(wpn->type==FSWEAPON_AIM54)
+			{
+				col=YsRed();
+			}
+			else if(wpn->type==FSWEAPON_AGM84 || wpn->type==FSWEAPON_AGM88)
+			{
+				col=YsYellow();
+			}
+			else if(wpn->type==FSWEAPON_GBU28)
+			{
+				col=YsMagenta();
+			}
 			else
 			{
 				continue;

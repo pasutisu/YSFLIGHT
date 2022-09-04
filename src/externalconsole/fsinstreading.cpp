@@ -674,6 +674,25 @@ YsString FsAmmunitionIndication::Ammunition::FormatString(void) const
 			ammoStr.Append(")");
 		}
 		break;
+	case WPNTYPE_AIM54:
+		if(YsTolerance<standByTimer)
+		{
+			intervalStr.Printf("  [%d]",standByTimer);
+		}
+		ammoStr.Printf("AAM:%d (Long-Range)",quantity);
+		break;
+	case WPNTYPE_AGM84:
+		ammoStr.Printf("ASM:%d",quantity);
+		break;
+	case WPNTYPE_AGM88:
+		ammoStr.Printf("ARM:%d",quantity);
+		break;
+	case WPNTYPE_GBU28:
+		ammoStr.Printf("BOM:%d (5000lb)  ",quantity);
+		break;
+	case WPNTYPE_CANNON:
+		ammoStr.Printf("H-GUN:%d",quantity);
+		break;
 	}
 
 	ammoStr.Append(intervalStr);

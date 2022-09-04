@@ -1112,6 +1112,26 @@ YSRESULT FsAirplaneProperty::CycleWeaponOfChoice(void)
 		}
 		else if(woc==FSWEAPON_SMOKE)
 		{
+			woc=FSWEAPON_AIM54;
+		}
+		else if(woc==FSWEAPON_AIM54)
+		{
+			woc=FSWEAPON_AGM84;
+		}
+		else if(woc==FSWEAPON_AGM84)
+		{
+			woc=FSWEAPON_AGM88;
+		}
+		else if(woc==FSWEAPON_AGM88)
+		{
+			woc=FSWEAPON_GBU28;
+		}
+		else if(woc==FSWEAPON_GBU28)
+		{
+			woc=FSWEAPON_CANNON;
+		}
+		else if(woc==FSWEAPON_CANNON)
+		{
 			woc=FSWEAPON_GUN;
 		}
 
@@ -4653,6 +4673,15 @@ YSBOOL FsAirplaneProperty::IsWeaponSlotCurrentlyVisible(int slotId) const
 				return chBombVisible;
 			case FSWEAPON_ROCKET:
 				return chRocketVisible;
+			case FSWEAPON_AIM54:
+				return chAAMVisible;
+			case FSWEAPON_AGM84:
+			case FSWEAPON_AGM88:
+				return chAGMVisible;
+			case FSWEAPON_GBU28:
+				return chBombVisible;
+			case FSWEAPON_CANNON:
+				return chRocketVisible;
 			default:
 				return YSTRUE;
 			}
@@ -6048,18 +6077,44 @@ YSBOOL FsAirplaneProperty::RunVirtualButtonQueue(
 				firedWeapon=FSWEAPON_AIM9;
 				return FireWeapon(blockedByBombBay,sim,ctime,bul,owner,firedWeapon);
 			}
-			else
+			else if(GetNumWeapon(FSWEAPON_AIM120)>0)
 			{
 				firedWeapon=FSWEAPON_AIM120;
 				return FireWeapon(blockedByBombBay,sim,ctime,bul,owner,firedWeapon);
 			}
+			else if(GetNumWeapon(FSWEAPON_AIM54)>0)
+			{
+				firedWeapon=FSWEAPON_AIM54;
+				return FireWeapon(blockedByBombBay,sim,ctime,bul,owner,firedWeapon);
+			}
 			break;
 		case VBT_FIREAGM:
+			if(GetNumWeapon(FSWEAPON_AGM65)>0)
+			{
 			firedWeapon=FSWEAPON_AGM65;
 			return FireWeapon(blockedByBombBay,sim,ctime,bul,owner,FSWEAPON_AGM65);
+			}
+			else if(GetNumWeapon(FSWEAPON_AGM84)>0)
+			{
+				firedWeapon=FSWEAPON_AGM84;
+				return FireWeapon(blockedByBombBay,sim,ctime,bul,owner,firedWeapon);
+			}
+			else if(GetNumWeapon(FSWEAPON_AGM88)>0)
+			{
+				firedWeapon=FSWEAPON_AGM88;
+				return FireWeapon(blockedByBombBay,sim,ctime,bul,owner,firedWeapon);
+			}
 		case VBT_FIREROCKET:
+			if(GetNumWeapon(FSWEAPON_ROCKET)>0)
+			{
 			firedWeapon=FSWEAPON_ROCKET;
 			return FireWeapon(blockedByBombBay,sim,ctime,bul,owner,FSWEAPON_ROCKET);
+			}
+			else if(GetNumWeapon(FSWEAPON_CANNON)>0)
+			{
+				firedWeapon=FSWEAPON_CANNON;
+				return FireWeapon(blockedByBombBay,sim,ctime,bul,owner,firedWeapon);
+			}
 		case VBT_DROPBOMB:
 			if(GetNumWeapon(FSWEAPON_BOMB)>0)
 			{
@@ -6075,6 +6130,11 @@ YSBOOL FsAirplaneProperty::RunVirtualButtonQueue(
 			{
 				firedWeapon=FSWEAPON_BOMB500HD;
 				return FireWeapon(blockedByBombBay,sim,ctime,bul,owner,FSWEAPON_BOMB500HD);
+			}
+			else if(GetNumWeapon(FSWEAPON_GBU28)>0)
+			{
+				firedWeapon=FSWEAPON_GBU28;
+				return FireWeapon(blockedByBombBay,sim,ctime,bul,owner,firedWeapon);
 			}
 			break;
 		case VBT_DISPENSEFLARE:
@@ -6123,7 +6183,8 @@ YSBOOL FsAirplaneProperty::FireWeapon(
 
 	if(wpnType==FSWEAPON_AIM9 || wpnType==FSWEAPON_AIM9X || wpnType==FSWEAPON_AGM65 || 
 	   wpnType==FSWEAPON_BOMB || wpnType==FSWEAPON_ROCKET ||
-	   wpnType==FSWEAPON_AIM120 || wpnType==FSWEAPON_BOMB250 || wpnType==FSWEAPON_BOMB500HD || wpnType==FSWEAPON_FUELTANK)
+	   wpnType==FSWEAPON_AIM120 || wpnType==FSWEAPON_BOMB250 || wpnType==FSWEAPON_BOMB500HD || wpnType==FSWEAPON_FUELTANK ||
+	   wpnType==FSWEAPON_AIM54 || wpnType==FSWEAPON_AGM84 || wpnType==FSWEAPON_AGM88 || wpnType==FSWEAPON_GBU28 || wpnType==FSWEAPON_CANNON)
 	{
 		int i;
 
@@ -6399,6 +6460,101 @@ YSBOOL FsAirplaneProperty::FireWeapon(
 				bul.DispenseFlare(ctime,missilePos,staVelocity+flareVel,120.0,1000.0,owner,YSTRUE,YSTRUE);
 			}
 			break;
+		case FSWEAPON_AIM54:
+			{
+				fired=YSTRUE;
+				staRecentlyFiredMissileId=
+					bul.Fire(ctime,
+					         wpnType,
+					         missilePos,
+					         missileAtt, //staAttitude,
+					         staV,
+					         340.0*6.0,
+					         GetAAMRange(wpnType),
+					         YsDegToRad(40.0),
+					         GetAAMRadarAngle(),
+					         30,
+					         owner,
+					         staAirTargetKey, // <- Locked On Target
+					         YSTRUE,YSTRUE);
+			}
+			break;
+		case FSWEAPON_AGM84:
+			{
+				fired=YSTRUE;
+				staRecentlyFiredMissileId=
+					bul.Fire(ctime,
+					         wpnType,
+					         missilePos,
+					         missileAtt, //staAttitude,
+					         staV,
+					         340.0*1.5,
+					         GetAGMRange(wpnType),
+					         YsDegToRad(5.0),
+					         GetAGMRadarAngle(),
+					         50,
+					         owner,
+					         staGroundTargetKey, // <- Locked On Target
+					         YSTRUE,
+					         YSTRUE);
+			}
+			break;
+		case FSWEAPON_AGM88:
+			{
+				fired=YSTRUE;
+				// stub
+				staRecentlyFiredMissileId=
+					bul.Fire(ctime,
+					         wpnType,
+					         missilePos,
+					         missileAtt, //staAttitude,
+					         staV,
+					         340.0*2.5,
+					         GetAGMRange(wpnType),
+					         YsDegToRad(90.0),
+					         GetAGMRadarAngle(),
+					         24,
+					         owner,
+					         staGroundTargetKey, // <- Locked On Target
+					         YSTRUE,
+					         YSTRUE);
+			}
+			break;
+		case FSWEAPON_GBU28:
+			{
+				fired=YSTRUE;
+				bul.Bomb(ctime,
+				         wpnType,
+				         missilePos,
+				         staAttitude,
+				         staVelocity,
+				         340.0,
+				         500,
+				         owner,
+				         YSTRUE,
+				         YSTRUE);
+			}
+			break;
+		case FSWEAPON_CANNON:
+			{
+				fired=YSTRUE;
+				// stub
+				bul.Fire(ctime,
+				         wpnType,
+				         missilePos,
+				         missileAtt, //staAttitude,
+				         staV,
+				         GetRocketSpeed(),
+				         GetRocketRange(),
+				         YsDegToRad(90.0),
+				         0.0,
+				         10,
+				         owner,
+				         YSNULLHASHKEY,              // <- Locked On Target
+				         YSTRUE,
+				         YSTRUE);
+			}
+			break;
 		}
 	}
 
@@ -6648,7 +6804,7 @@ int FsAirplaneProperty::AddWeaponToSlot(const FSWEAPONTYPE wpnType,const int n) 
 
 YSBOOL FsAirplaneProperty::GuidedAAMIsLoaded(void) const
 {
-	if(GetNumWeapon(FSWEAPON_AIM9)>0 || GetNumWeapon(FSWEAPON_AIM9X)>0 || GetNumWeapon(FSWEAPON_AIM120)>0)
+	if(GetNumWeapon(FSWEAPON_AIM9)>0 || GetNumWeapon(FSWEAPON_AIM9X)>0 || GetNumWeapon(FSWEAPON_AIM120)>0 || GetNumWeapon(FSWEAPON_AIM54)>0)
 	{
 		return YSTRUE;
 	}
@@ -6657,7 +6813,7 @@ YSBOOL FsAirplaneProperty::GuidedAAMIsLoaded(void) const
 
 YSBOOL FsAirplaneProperty::GuidedAGMIsLoaded(void) const
 {
-	if(GetNumWeapon(FSWEAPON_AGM65)>0)
+	if(GetNumWeapon(FSWEAPON_AGM65)>0 || GetNumWeapon(FSWEAPON_AGM84)>0 || GetNumWeapon(FSWEAPON_AGM88)>0)
 	{
 		return YSTRUE;
 	}
@@ -6666,7 +6822,7 @@ YSBOOL FsAirplaneProperty::GuidedAGMIsLoaded(void) const
 
 YSBOOL FsAirplaneProperty::FreeFallBombIsLoaded(void) const
 {
-	if(GetNumWeapon(FSWEAPON_BOMB)>0 || GetNumWeapon(FSWEAPON_BOMB250)>0)
+	if(GetNumWeapon(FSWEAPON_BOMB)>0 || GetNumWeapon(FSWEAPON_BOMB250)>0 || GetNumWeapon(FSWEAPON_GBU28)>0)
 	{
 		return YSTRUE;
 	}
@@ -6679,7 +6835,11 @@ YSBOOL FsAirplaneProperty::AntiGroundWeaponIsLoaded(void) const
 	   GetNumWeapon(FSWEAPON_AGM65)>0 || 
 	   GetNumWeapon(FSWEAPON_ROCKET)>0 || 
 	   GetNumWeapon(FSWEAPON_BOMB)>0 || 
-	   GetNumWeapon(FSWEAPON_BOMB250)>0)
+	   GetNumWeapon(FSWEAPON_BOMB250)>0 || 
+	   GetNumWeapon(FSWEAPON_AGM84)>0 || 
+	   GetNumWeapon(FSWEAPON_AGM88)>0 || 
+	   GetNumWeapon(FSWEAPON_GBU28)>0 || 
+	   GetNumWeapon(FSWEAPON_CANNON)>0)
 	{
 		return YSTRUE;
 	}
@@ -6700,11 +6860,14 @@ void FsAirplaneProperty::UnloadGuidedAAM(void)
 	SetNumWeapon(FSWEAPON_AIM9,0);
 	SetNumWeapon(FSWEAPON_AIM9X,0);
 	SetNumWeapon(FSWEAPON_AIM120,0);
+	SetNumWeapon(FSWEAPON_AIM54,0);
 }
 
 void FsAirplaneProperty::UnloadGuidedAGM(void)
 {
 	SetNumWeapon(FSWEAPON_AGM65,0);
+	SetNumWeapon(FSWEAPON_AGM84,0);
+	SetNumWeapon(FSWEAPON_AGM88,0);
 }
 
 void FsAirplaneProperty::UnloadUnguidedWeapon(void)
@@ -6714,6 +6877,8 @@ void FsAirplaneProperty::UnloadUnguidedWeapon(void)
 	SetNumWeapon(FSWEAPON_BOMB,0);
 	SetNumWeapon(FSWEAPON_BOMB250,0);
 	SetNumWeapon(FSWEAPON_BOMB500HD,0);
+	SetNumWeapon(FSWEAPON_GBU28,0);
+	SetNumWeapon(FSWEAPON_CANNON,0);
 
 	int i;
 	for(i=0; i<staTurret.GetN(); i++)
@@ -7071,6 +7236,8 @@ const double FsAirplaneProperty::GetAAMRange(FSWEAPONTYPE wpnType) const
 		return 5000.0;
 	case FSWEAPON_AIM120:
 		return 30000.0;
+	case FSWEAPON_AIM54:
+		return 120000.0;
 	}
 	return 0.0;
 }
@@ -7206,6 +7373,22 @@ const double &FsAirplaneProperty::GetAGMRadarAngle(void) const
 const double &FsAirplaneProperty::GetAGMRange(void) const
 {
 	return chAGMRange;
+}
+
+const double FsAirplaneProperty::GetAGMRange(FSWEAPONTYPE wpnType) const
+{
+	switch(wpnType)
+	{
+	default:
+		break;
+	case FSWEAPON_AGM65:
+		return 5000.0;
+	case FSWEAPON_AGM84:
+		return 60000.0;
+	case FSWEAPON_AGM88:
+		return 30000.0;
+	}
+	return 0.0;
 }
 
 int FsAirplaneProperty::GetAGMDestructivePower(void) const
@@ -9222,16 +9405,20 @@ YSRESULT FsAirplaneProperty::SendCommand(const char in[])
 				SetNumWeapon(FSWEAPON_AIM9,0);
 				SetNumWeapon(FSWEAPON_AIM9X,0);
 				SetNumWeapon(FSWEAPON_AIM120,0);
+				SetNumWeapon(FSWEAPON_AIM54,0);
 				res=YSOK;
 				break;
 			case 160: // "ULOADAGM",  // Unload all AGMs
 				SetNumWeapon(FSWEAPON_AGM65,0);
+				SetNumWeapon(FSWEAPON_AGM84,0);
+				SetNumWeapon(FSWEAPON_AGM88,0);
 				res=YSOK;
 				break;
 			case 161: // "ULOADBOM",  // Unload all Bombs
 				SetNumWeapon(FSWEAPON_BOMB,0);
 				SetNumWeapon(FSWEAPON_BOMB250,0);
 				SetNumWeapon(FSWEAPON_BOMB500HD,0);
+				SetNumWeapon(FSWEAPON_GBU28,0);
 				res=YSOK;
 				break;
 			case 162: // "ULOADFLR",  // Unload all Flare
@@ -9245,6 +9432,7 @@ YSRESULT FsAirplaneProperty::SendCommand(const char in[])
 				break;
 			case 164: // "ULOADRKT"
 				SetNumWeapon(FSWEAPON_ROCKET,0);
+				SetNumWeapon(FSWEAPON_CANNON,0);
 				res=YSOK;
 				break;
 			case 165: // "LOOKOFST",  // Look-at Offset
@@ -9807,7 +9995,12 @@ double FsAirplaneProperty::GetPayloadWeight(void) const
 	      +double(GetNumWeapon(FSWEAPON_BOMB250))*120.0
 	      +double(GetNumWeapon(FSWEAPON_BOMB500HD))*250.0
 	      +double(GetNumWeapon(FSWEAPON_ROCKET))*10.0
-	      +staSmokeOil;
+	      +staSmokeOil
+	      +double(GetNumWeapon(FSWEAPON_AIM54))*500.0
+	      +double(GetNumWeapon(FSWEAPON_AGM84))*750.0
+	      +double(GetNumWeapon(FSWEAPON_AGM88))*600.0
+	      +double(GetNumWeapon(FSWEAPON_GBU28))*2500.0
+	      +double(GetNumWeapon(FSWEAPON_CANNON))*50.0;
 
 	int i;
 	for(i=0; i<staWeaponSlot.GetN(); i++)

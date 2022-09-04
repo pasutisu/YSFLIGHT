@@ -195,6 +195,56 @@ void FsWeapon::Draw(
 			ysD3dDev->d3dDev->SetTransform(D3DTS_WORLD,&pushMatrix);
 
 			break;
+		case FSWEAPON_AIM54:
+			if(lifeRemain>YsTolerance)
+			{
+				auto &vis=(coarse!=YSTRUE ? aim54 : aim54_coarse);
+				if(vis!=nullptr)
+				{
+					vis.Draw(viewMat,projMat,pos,att,drawFlag);
+				}
+			}
+			break;
+		case FSWEAPON_AGM84:
+			if(lifeRemain>YsTolerance)
+			{
+				auto &vis=(coarse!=YSTRUE ? agm84 : agm84_coarse);
+				if(vis!=nullptr)
+				{
+					vis.Draw(viewMat,projMat,pos,att,drawFlag);
+				}
+			}
+			break;
+		case FSWEAPON_AGM88:
+			if(lifeRemain>YsTolerance)
+			{
+				auto &vis=(coarse!=YSTRUE ? agm88 : agm88_coarse);
+				if(vis!=nullptr)
+				{
+					vis.Draw(viewMat,projMat,pos,att,drawFlag);
+				}
+			}
+			break;
+		case FSWEAPON_GBU28:
+			if(lifeRemain>YsTolerance)
+			{
+				auto &vis=(coarse!=YSTRUE ? gbu28 : gbu28_coarse);
+				if(vis!=nullptr)
+				{
+					vis.Draw(viewMat,projMat,pos,att,drawFlag);
+				}
+			}
+			break;
+		case FSWEAPON_CANNON:
+			if(lifeRemain>YsTolerance)
+			{
+				auto &vis=(coarse!=YSTRUE ? cannon : cannon_coarse);
+				if(vis!=nullptr)
+				{
+					vis.Draw(viewMat,projMat,pos,att,drawFlag);
+				}
+			}
+			break;
 		}
 
 

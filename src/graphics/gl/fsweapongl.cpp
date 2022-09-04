@@ -228,6 +228,81 @@ void FsWeapon::Draw(
 			glPopMatrix();
 
 			break;
+		case FSWEAPON_AIM54:
+			if(lifeRemain>YsTolerance)
+			{
+				glDisable(GL_CULL_FACE);
+				glEnable(GL_LIGHTING);
+				if(coarse!=YSTRUE && aim54!=nullptr)
+				{
+					aim54.Draw(viewMat,projMat,pos,att,drawFlag);
+				}
+				else if(coarse==YSTRUE && aim54_coarse!=nullptr)
+				{
+					aim54_coarse.Draw(viewMat,projMat,pos,att,drawFlag);
+				}
+			}
+			break;
+		case FSWEAPON_AGM84:
+			if(lifeRemain>YsTolerance)
+			{
+				glDisable(GL_CULL_FACE);
+				glEnable(GL_LIGHTING);
+				if(coarse!=YSTRUE && agm84!=nullptr)
+				{
+					agm84.Draw(viewMat,projMat,pos,att,drawFlag);
+				}
+				else if(coarse==YSTRUE && agm84_coarse!=nullptr)
+				{
+					agm84_coarse.Draw(viewMat,projMat,pos,att,drawFlag);
+				}
+			}
+			break;
+		case FSWEAPON_AGM88:
+			if(lifeRemain>YsTolerance)
+			{
+				glDisable(GL_CULL_FACE);
+				glEnable(GL_LIGHTING);
+				if(coarse!=YSTRUE && agm88!=nullptr)
+				{
+					agm88.Draw(viewMat,projMat,pos,att,drawFlag);
+				}
+				else if(coarse==YSTRUE && agm88_coarse!=nullptr)
+				{
+					agm88_coarse.Draw(viewMat,projMat,pos,att,drawFlag);
+				}
+			}
+			break;
+		case FSWEAPON_GBU28:
+			if(lifeRemain>YsTolerance)
+			{
+				glDisable(GL_CULL_FACE);
+				glEnable(GL_LIGHTING);
+				if(coarse!=YSTRUE && gbu28!=nullptr)
+				{
+					gbu28.Draw(viewMat,projMat,pos,att,drawFlag);
+				}
+				else if(coarse==YSTRUE && gbu28_coarse!=nullptr)
+				{
+					gbu28_coarse.Draw(viewMat,projMat,pos,att,drawFlag);
+				}
+			}
+			break;
+		case FSWEAPON_CANNON:
+			if(lifeRemain>YsTolerance)
+			{
+				glDisable(GL_CULL_FACE);
+				glEnable(GL_LIGHTING);
+				if(coarse!=YSTRUE && cannon!=nullptr)
+				{
+					cannon.Draw(viewMat,projMat,pos,att,drawFlag);
+				}
+				else if(coarse==YSTRUE && cannon_coarse!=nullptr)
+				{
+					cannon_coarse.Draw(viewMat,projMat,pos,att,drawFlag);
+				}
+			}
+			break;
 		}
 
 		if(trail!=nullptr &&

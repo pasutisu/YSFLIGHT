@@ -135,6 +135,11 @@ public:
 		WPNTYPE_BOMB500HD,      // The order shall not be changed.
 		WPNTYPE_AIM9X,          // The order shall not be changed.
 		WPNTYPE_FUELTANK,       // The order shall not be changed.
+		WPNTYPE_AIM54,          // The order shall not be changed.
+		WPNTYPE_AGM84,          // The order shall not be changed.
+		WPNTYPE_AGM88,          // The order shall not be changed.
+		WPNTYPE_GBU28,          // The order shall not be changed.
+		WPNTYPE_CANNON,         // The order shall not be changed.
 	};
 
 	class Ammunition
