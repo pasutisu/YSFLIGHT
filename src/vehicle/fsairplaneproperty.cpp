@@ -6174,7 +6174,8 @@ YSBOOL FsAirplaneProperty::FireWeapon(
 
 
 	// Bomb bay door check
-	if((wpnType==FSWEAPON_BOMB || wpnType==FSWEAPON_BOMB250 || wpnType==FSWEAPON_BOMB500HD) && chBombInBombBay==YSTRUE && staBombBayDoor<0.95)
+	if((wpnType==FSWEAPON_BOMB || wpnType==FSWEAPON_BOMB250 || wpnType==FSWEAPON_BOMB500HD ||
+	    wpnType==FSWEAPON_GBU28) && chBombInBombBay==YSTRUE && staBombBayDoor<0.95)
 	{
 		blockedByBombBay=YSTRUE;
 		return YSFALSE;

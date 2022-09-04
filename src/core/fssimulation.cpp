@@ -6360,7 +6360,7 @@ void FsSimulation::SimMakeUpCockpitIndicationSet(class FsCockpitIndicationSet &c
 		cockpitIndicationSet.ammo.ammoArray.Last().quantity=agm84;
 		cockpitIndicationSet.ammo.ammoArray.Last().maxQuantity=0;
 		cockpitIndicationSet.ammo.ammoArray.Last().level=0;
-		cockpitIndicationSet.ammo.ammoArray.Last().standByTimer=samInterval;
+		cockpitIndicationSet.ammo.ammoArray.Last().standByTimer=0;
 		cockpitIndicationSet.ammo.ammoArray.Last().channel=0;;
 		cockpitIndicationSet.ammo.ammoArray.Last().availableChannel=0;;
 	}
@@ -6372,7 +6372,7 @@ void FsSimulation::SimMakeUpCockpitIndicationSet(class FsCockpitIndicationSet &c
 		cockpitIndicationSet.ammo.ammoArray.Last().quantity=agm88;
 		cockpitIndicationSet.ammo.ammoArray.Last().maxQuantity=0;
 		cockpitIndicationSet.ammo.ammoArray.Last().level=0;
-		cockpitIndicationSet.ammo.ammoArray.Last().standByTimer=samInterval;
+		cockpitIndicationSet.ammo.ammoArray.Last().standByTimer=0;
 		cockpitIndicationSet.ammo.ammoArray.Last().channel=0;;
 		cockpitIndicationSet.ammo.ammoArray.Last().availableChannel=0;;
 	}
@@ -6384,7 +6384,7 @@ void FsSimulation::SimMakeUpCockpitIndicationSet(class FsCockpitIndicationSet &c
 		cockpitIndicationSet.ammo.ammoArray.Last().quantity=gbu28;
 		cockpitIndicationSet.ammo.ammoArray.Last().maxQuantity=0;
 		cockpitIndicationSet.ammo.ammoArray.Last().level=0;
-		cockpitIndicationSet.ammo.ammoArray.Last().standByTimer=samInterval;
+		cockpitIndicationSet.ammo.ammoArray.Last().standByTimer=0;
 		cockpitIndicationSet.ammo.ammoArray.Last().channel=0;;
 		cockpitIndicationSet.ammo.ammoArray.Last().availableChannel=0;;
 	}
@@ -6396,7 +6396,7 @@ void FsSimulation::SimMakeUpCockpitIndicationSet(class FsCockpitIndicationSet &c
 		cockpitIndicationSet.ammo.ammoArray.Last().quantity=cannon;
 		cockpitIndicationSet.ammo.ammoArray.Last().maxQuantity=0;
 		cockpitIndicationSet.ammo.ammoArray.Last().level=0;
-		cockpitIndicationSet.ammo.ammoArray.Last().standByTimer=samInterval;
+		cockpitIndicationSet.ammo.ammoArray.Last().standByTimer=0;
 		cockpitIndicationSet.ammo.ammoArray.Last().channel=0;;
 		cockpitIndicationSet.ammo.ammoArray.Last().availableChannel=0;;
 	}

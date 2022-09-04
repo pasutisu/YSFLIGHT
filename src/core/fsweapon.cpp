@@ -1208,15 +1208,8 @@ void FsWeapon::Move(const double &dt,const double &cTime,const FsWeather &weathe
 
 		pos+=weather.GetWind()*dt;
 
-		if(type!=FSWEAPON_BOMB && type!=FSWEAPON_BOMB250 && type!=FSWEAPON_BOMB500HD && type!=FSWEAPON_FUELTANK)  // Bomb falls until it hits the ground
-		{
-			lifeRemain=lifeRemain-velocity*dt;
-			if(lifeRemain<=YsTolerance)
-			{
-				lifeRemain=0.0;
-			}
-		}
-		if(type!=FSWEAPON_GBU28)  // Bomb falls until it hits the ground
+		if(type!=FSWEAPON_BOMB && type!=FSWEAPON_BOMB250 && type!=FSWEAPON_BOMB500HD && type!=FSWEAPON_FUELTANK &&
+		   type!=FSWEAPON_GBU28)  // Bomb falls until it hits the ground
 		{
 			lifeRemain=lifeRemain-velocity*dt;
 			if(lifeRemain<=YsTolerance)
@@ -1234,14 +1227,8 @@ void FsWeapon::Move(const double &dt,const double &cTime,const FsWeather &weathe
 		}
 	}
 
-	if(type==FSWEAPON_AIM9 || type==FSWEAPON_AIM9X || type==FSWEAPON_AGM65 || type==FSWEAPON_AIM120 || type==FSWEAPON_FLARE)
-	{
-		if(nullptr!=trail && lifeRemain>0.0)
-		{
-			trail->Add(dt,cTime,pos,att);
-		}
-	}
-	if(type==FSWEAPON_AIM54 || type==FSWEAPON_AGM84 || type==FSWEAPON_AGM88)
+	if(type==FSWEAPON_AIM9 || type==FSWEAPON_AIM9X || type==FSWEAPON_AGM65 || type==FSWEAPON_AIM120 || type==FSWEAPON_FLARE ||
+	   type==FSWEAPON_AIM54 || type==FSWEAPON_AGM84 || type==FSWEAPON_AGM88)
 	{
 		if(nullptr!=trail && lifeRemain>0.0)
 		{

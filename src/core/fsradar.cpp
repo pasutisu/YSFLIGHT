@@ -269,7 +269,7 @@ void FsHorizontalRadar::DrawBasic(
 			}
 			else if(wpn->type==FSWEAPON_GBU28)
 			{
-				col=YsMagenta();
+				col=YsDarkMagenta();
 			}
 			else
 			{
