@@ -334,7 +334,7 @@ void FsAirplaneProperty::Initialize(void)
 
 	chManSpeed1=0.0;
 	chManSpeed2=0.0;
-	chManSpeed3=100.0;
+	chManSpeed3=0.0;
 
 	chDirectAttitudeControlSpeed1=99998.0;
 	chDirectAttitudeControlSpeed2=99999.0;
@@ -6538,22 +6538,30 @@ YSBOOL FsAirplaneProperty::FireWeapon(
 			break;
 		case FSWEAPON_CANNON:
 			{
-				fired=YSTRUE;
-				// stub
-				bul.Fire(ctime,
-				         wpnType,
-				         missilePos,
-				         missileAtt, //staAttitude,
-				         staV,
-				         GetRocketSpeed(),
-				         GetRocketRange(),
-				         YsDegToRad(90.0),
-				         0.0,
-				         10,
-				         owner,
-				         YSNULLHASHKEY,              // <- Locked On Target
-				         YSTRUE,
-				         YSTRUE);
+				YsVec3 turretPos, turretDir;
+				YsAtt3 turretAtt;
+				if(
+				   GetFirstPilotControlledTurretPosition(turretPos)==YSOK &&
+				   GetFirstPilotControlledTurretDirection(turretDir)==YSOK)
+				{
+					turretAtt.SetTwoVector(turretDir, GetAttitude().GetUpVector());
+
+					fired=YSTRUE;
+					bul.Fire(ctime,
+					         wpnType,
+					         turretPos,
+					         turretAtt, //staAttitude,
+					         GetCannonSpeed(),
+					         GetCannonSpeed(),
+					         GetCannonRange(),
+					         YsDegToRad(90.0),
+					         0.0,
+					         GetGunPower(),
+					         owner,
+					         YSNULLHASHKEY,              // <- Locked On Target
+					         YSTRUE,
+					         YSTRUE);
+				}
 			}
 			break;
 		}
@@ -7464,6 +7472,28 @@ const YsColor &FsAirplaneProperty::GetDefaultSmokeColor(int smkIdx) const
 void FsAirplaneProperty::SetSmokeOil(const double &oil)
 {
 	staSmokeOil=oil;
+}
+
+const double FsAirplaneProperty::GetCannonSpeed(void) const
+{
+	if(chManSpeed3 > 0.0)
+	{
+		return chManSpeed3;
+	}
+	return chBulInitSpeed;
+}
+
+const double FsAirplaneProperty::GetCannonRange(void) const
+{
+	int i;
+	for(i=0; i<chTurret.GetN(); i++)
+	{
+		if(chTurret[i].controlledBy==FSTURRET_CTRL_BY_PILOT)
+		{
+			return chTurret[i].range;
+		}
+	}
+	return chBulRange;
 }
 
 

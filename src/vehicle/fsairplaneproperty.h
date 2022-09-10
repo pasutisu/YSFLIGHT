@@ -638,6 +638,8 @@ public:
 	const double & GetRocketRange(void) const;
 	YSBOOL SetGroundTargetKey(unsigned int gndKey);
 	unsigned int GetGroundTargetKey(void) const;
+	const double FsAirplaneProperty::GetCannonSpeed(void) const;
+	const double FsAirplaneProperty::GetCannonRange(void) const;
 
 	YSRESULT GetGunPosition(YsVec3 &gun,YsVec3 &gunDir) const;
 	const double &GetGunInterval(void) const;
