@@ -7984,6 +7984,14 @@ YSRESULT FsAirplaneProperty::EncodeProperty(
 		MakeShortFormat(str,cmdStr,netVersion);
 		turretCmd.Append(str);
 
+		sprintf(cmdStr,"TURRETVP %d %.2lfrad",i,chTurret[i].vp);
+		MakeShortFormat(str,cmdStr,netVersion);
+		turretCmd.Append(str);
+
+		sprintf(cmdStr,"TURRETVH %d %.2lfrad",i,chTurret[i].vh);
+		MakeShortFormat(str,cmdStr,netVersion);
+		turretCmd.Append(str);
+
 		if(chTurret[i].dnmNodeName[0]!=0)
 		{
 			sprintf(cmdStr,"TURRETNM %d \"%s\"",i,chTurret[i].dnmNodeName.GetArray());
@@ -8367,6 +8375,8 @@ const char *const FsAirplaneProperty::keyWordSource[]=
 
 	// 2022/09/12
 	"MINIDAMG", // Minimum damage from ground object
+	"TURRETVP", // Number VelocityPitch
+	"TURRETVH", // Number VelocityHdg
 
 	NULL
 };
@@ -9769,6 +9779,30 @@ YSRESULT FsAirplaneProperty::SendCommand(const char in[])
 			case 189: //	"MINIDAMG"  // Minimum damage
 				chMinimumDamage=atoi(av[1]);
 				res=YSOK;
+				break;
+			case 190: // "TURRETVP",  // Number VelocityPitch
+				if(ac>=3)
+				{
+					turretId=atoi(av[1]);
+					if(0<=turretId && 
+					   turretId<chTurret.GetN() &&
+					   FsGetAngle(chTurret[turretId].vp,av[2])==YSOK)
+					{
+						res=YSOK;
+					}
+				}
+				break;
+			case 191: // "TURRETVH",  // Number VelocityHdg
+				if(ac>=3)
+				{
+					turretId=atoi(av[1]);
+					if(0<=turretId && 
+					   turretId<chTurret.GetN() &&
+					   FsGetAngle(chTurret[turretId].vh,av[2])==YSOK)
+					{
+						res=YSOK;
+					}
+				}
 				break;
 			}
 			if(res!=YSOK)
