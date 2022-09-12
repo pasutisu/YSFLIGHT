@@ -484,6 +484,8 @@ void FsAirplaneProperty::Initialize(void)
 	staOnThisCarrier=NULL;
 	staCatapulted=YSFALSE;
 	staArrested=YSFALSE;
+
+	chMinimumDamage=0;
 }
 
 void FsAirplaneProperty::ClearMalfunction(void)
@@ -6662,31 +6664,34 @@ YSBOOL FsAirplaneProperty::GetDamage(YSBOOL &killed,int dmg,FSDIEDOF diedOf)
 	killed=YSFALSE;
 	if(IsActive()==YSTRUE)
 	{
-		staDamageTolerance-=dmg;
-		if(staDamageTolerance<=0)
+		if(dmg>chMinimumDamage)
 		{
-			switch((rand()%700)/100)
+			staDamageTolerance-=(dmg-chMinimumDamage);
+			if(staDamageTolerance<=0)
 			{
-			case 0:
-				SetState(FSDEAD,diedOf);
-				staDamageTolerance=0;
-				break;
-			case 1:
-			case 2:
-			case 3:
-				SetState(FSDEADSPIN,diedOf);
-				staDamageTolerance=1;
-				break;
-			case 4:
-			case 5:
-			case 6:
-				SetState(FSDEADFLATSPIN,diedOf);
-				staDamageTolerance=1;
-				break;
+				switch((rand()%700)/100)
+				{
+				case 0:
+					SetState(FSDEAD,diedOf);
+					staDamageTolerance=0;
+					break;
+				case 1:
+				case 2:
+				case 3:
+					SetState(FSDEADSPIN,diedOf);
+					staDamageTolerance=1;
+					break;
+				case 4:
+				case 5:
+				case 6:
+					SetState(FSDEADFLATSPIN,diedOf);
+					staDamageTolerance=1;
+					break;
+				}
+				killed=YSTRUE;
 			}
-			killed=YSTRUE;
+			return YSTRUE;
 		}
-		return YSTRUE;
 	}
 	return YSFALSE;
 }
@@ -8356,6 +8361,9 @@ const char *const FsAirplaneProperty::keyWordSource[]=
 	// 2018/10/07
 	"INITZOOM",  // Initial zoom factor
 
+	// 2022/09/12
+	"MINIDAMG", // Minimum damage from ground object
+
 	NULL
 };
 
@@ -9753,6 +9761,10 @@ YSRESULT FsAirplaneProperty::SendCommand(const char in[])
 					chDefZoom=atof(av[1]);  // 2018/11/24 Close shave!  I was writing [i] here.
 					res=YSOK;
 				}
+				break;
+			case 189: //	"MINIDAMG"  // Minimum damage
+				chMinimumDamage=atoi(args[1]);
+				res=YSOK;
 				break;
 			}
 			if(res!=YSOK)

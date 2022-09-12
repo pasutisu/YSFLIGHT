@@ -481,6 +481,8 @@ protected:
 	double refLNGRunway;     //Runway Length required to land
 	double refThrLanding;    //Throttle Setting while landing
 
+	int chMinimumDamage;
+
 
 
 protected:
