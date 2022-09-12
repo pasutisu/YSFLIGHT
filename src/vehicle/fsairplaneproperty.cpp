@@ -7834,6 +7834,10 @@ YSRESULT FsAirplaneProperty::EncodeProperty(
 	MakeShortFormat(str,cmdStr,netVersion);
 	cmd.Append(str);
 
+	sprintf(cmdStr,"MINIDAMG %d",(int)chMinimumDamage);
+	MakeShortFormat(str,cmdStr,netVersion);
+	cmd.Append(str);
+
 	if(chIsJet==YSTRUE)
 	{
 		sprintf(cmdStr,"THRAFTBN %sN",YsOptimizeDoubleString(a1,chThrAb));
@@ -9763,7 +9767,7 @@ YSRESULT FsAirplaneProperty::SendCommand(const char in[])
 				}
 				break;
 			case 189: //	"MINIDAMG"  // Minimum damage
-				chMinimumDamage=atoi(args[1]);
+				chMinimumDamage=atoi(av[1]);
 				res=YSOK;
 				break;
 			}
