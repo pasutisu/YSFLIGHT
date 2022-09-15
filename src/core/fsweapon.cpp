@@ -1660,7 +1660,7 @@ YSBOOL FsWeapon::HitObject(
 						}
 					}
 
-					ExplodeBomb(callback,ctime,pos,destructivePower*10,explosion,sim,killCredit);
+					ExplodeBomb(callback,ctime,pos,destructivePower*5/2,explosion,sim,killCredit);
 					return YSTRUE;
 				}
 			}
