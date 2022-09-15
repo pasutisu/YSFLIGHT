@@ -8779,9 +8779,10 @@ void FsSimulation::SimDrawContainer(const ActualViewMode &actualViewMode) const
 					    (mat,viewAttitude,gnd->GetPosition(),gnd->GetPosition(),YsYellow(),"",NULL,YSFALSE,45,90);
 				}
 			}
+
 			else if(gnd!=NULL &&
-			   (playerPlane->Prop().GetWeaponOfChoice()==FSWEAPON_AGM84 ||
-			    playerPlane->Prop().GetWeaponOfChoice()==FSWEAPON_AGM88))
+			   ((playerPlane->Prop().GetWeaponOfChoice()==FSWEAPON_AGM84 && gnd->Prop().GetGroundType()==FSNAVYSHIP) ||
+			    (playerPlane->Prop().GetWeaponOfChoice()==FSWEAPON_AGM88 && gnd->Prop().GetSAMRange()>0.0)))
 			{
 				double distance,range;
 				distance=(gnd->GetPosition()-playerPlane->GetPosition()).GetLength();

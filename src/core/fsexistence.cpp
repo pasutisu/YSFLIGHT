@@ -1929,7 +1929,11 @@ YSBOOL FsAirplane::LockOn(FsSimulation *sim,const double &radarAltLimit)
 		gnd=NULL;
 		while((gnd=sim->FindNextGround(gnd))!=NULL)
 		{
-			if(gnd->Prop().IsAlive()==YSTRUE && gnd->iff!=this->iff && gnd->Prop().IsNonGameObject()!=YSTRUE)
+			if(gnd->Prop().IsAlive()==YSTRUE &&
+			   gnd->iff!=this->iff &&
+			   gnd->Prop().IsNonGameObject()!=YSTRUE &&
+			   (prop.GetWeaponOfChoice()!=FSWEAPON_AGM84 || gnd->Prop().GetGroundType()==FSNAVYSHIP) &&
+			   (prop.GetWeaponOfChoice()!=FSWEAPON_AGM84 || gnd->Prop().GetSAMRange()>0.0))
 			{
 				YsVec3 tpos;
 				gnd->Prop().GetPosition(tpos);
