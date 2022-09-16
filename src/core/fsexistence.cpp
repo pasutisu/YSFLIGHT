@@ -1933,7 +1933,7 @@ YSBOOL FsAirplane::LockOn(FsSimulation *sim,const double &radarAltLimit)
 			   gnd->iff!=this->iff &&
 			   gnd->Prop().IsNonGameObject()!=YSTRUE &&
 			   (prop.GetWeaponOfChoice()!=FSWEAPON_AGM84 || gnd->Prop().GetGroundType()==FSNAVYSHIP) &&
-			   (prop.GetWeaponOfChoice()!=FSWEAPON_AGM84 || gnd->Prop().GetSAMRange()>0.0))
+			   (prop.GetWeaponOfChoice()!=FSWEAPON_AGM88 || gnd->Prop().GetSAMRange()>0.0))
 			{
 				YsVec3 tpos;
 				gnd->Prop().GetPosition(tpos);
