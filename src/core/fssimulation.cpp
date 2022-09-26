@@ -4168,21 +4168,18 @@ void FsSimulation::SimComputeAirToObjCollision(void)
 			for(int j=0; j<gndCandidate.GetN(); j++)
 			{
 				FsGround *gnd2=gndCandidate[j];
-				if(YSTRUE==cfgPtr->midAirCollision || YSTRUE==gnd2->Prop().IsRacingCheckPoint())
+				if(gnd2->IsAlive()==YSTRUE)
 				{
-					if(gnd2->IsAlive()==YSTRUE)
+					YsVec3 collPos;
+					if(CheckMidAir(collPos,*air1,*gnd2)==YSTRUE)
 					{
-						YsVec3 collPos;
-						if(CheckMidAir(collPos,*air1,*gnd2)==YSTRUE)
-						{
-							air1->gndCollision.Increment();
-							air1->gndCollision.Last().objKey=gnd2->SearchKey();
-							air1->gndCollision.Last().pos=collPos;
+						air1->gndCollision.Increment();
+						air1->gndCollision.Last().objKey=gnd2->SearchKey();
+						air1->gndCollision.Last().pos=collPos;
 
-							gnd2->airCollision.Increment();
-							gnd2->airCollision.Last().objKey=air1->SearchKey();
-							gnd2->airCollision.Last().pos=collPos;
-						}
+						gnd2->airCollision.Increment();
+						gnd2->airCollision.Last().objKey=air1->SearchKey();
+						gnd2->airCollision.Last().pos=collPos;
 					}
 				}
 			}
@@ -4278,7 +4275,7 @@ void FsSimulation::SimProcessCollisionAndTerrain(const double & /*dt*/)
 			for(auto gnd2Coll : air1->gndCollision)
 			{
 				auto gnd2=FindGround(gnd2Coll.objKey);
-				if(nullptr!=gnd2 && (cfgPtr->midAirCollision==YSTRUE || YSTRUE==gnd2->Prop().IsRacingCheckPoint()))
+				if(nullptr!=gnd2)
 				{
 					if(gnd2->IsAlive()==YSTRUE)
 					{
