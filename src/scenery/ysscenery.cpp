@@ -1381,20 +1381,7 @@ YSRESULT YsSceneryShell::Save(YsTextOutputStream &textOut) const
 
 YSRESULT YsSceneryShell::LoadSrf(const YsTextFile &txtFile)
 {
-	YsShellExtReader reader;
-
-	YsListItem <YsString> *str;
-	reader.StartMergeSrf(shl);
-	str=NULL;
-	while((str=txtFile.GetText().FindNext(str))!=NULL)
-	{
-		if(reader.ReadSrfOneLine(shl,str->dat)!=YSOK)
-		{
-			return YSERR;
-		}
-	}
-	reader.EndMergeSrf();
-	return YSOK;
+	return shl.Load(txtFile.GetText());
 }
 
 YSRESULT YsSceneryShell::SaveCollSrf(YsTextOutputStream &textOut) const
@@ -1405,20 +1392,7 @@ YSRESULT YsSceneryShell::SaveCollSrf(YsTextOutputStream &textOut) const
 }
 YSRESULT YsSceneryShell::LoadCollSrf(const YsTextFile &txtFile)
 {
-	YsShellExtReader reader;
-
-	YsListItem <YsString> *str;
-	reader.StartMergeSrf(collShl);
-	str=NULL;
-	while((str=txtFile.GetText().FindNext(str))!=NULL)
-	{
-		if(reader.ReadSrfOneLine(collShl,str->dat)!=YSOK)
-		{
-			return YSERR;
-		}
-	}
-	reader.EndMergeSrf();
-	return YSOK;
+	return collShl.Load(txtFile.GetText());
 }
 YSRESULT YsSceneryShell::CacheCollLattice(void) const
 {

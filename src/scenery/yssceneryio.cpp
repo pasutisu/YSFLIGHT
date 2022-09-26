@@ -1453,7 +1453,7 @@ YSRESULT YsScenery::LoadFldOneLine(const char str[])
 								switch(loadingState)
 								{
 								case LOADINGSTATE_SRF /*4*/:
-									err=srf->collShl.LoadSrf(inStream);
+									err=srf->collShl.Load(inStream);
 									break;
 								default:
 									break;

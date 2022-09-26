@@ -302,39 +302,10 @@ const FsVisualSrf *FsAirplaneTemplate::GetCollision(void) const
 		coll=new FsVisualSrf;
 		if(coll!=NULL)
 		{
-			YsFileIO::File fp(GetCollisionFileName(),"r");
-			if(nullptr!=fp.Fp())
+			if(YSOK==coll->Load(GetCollisionFileName()) ||
+			   YSOK==coll->Load(_collFileName))
 			{
-				YsTextFileInputStream inStream(fp);
-				YsShellExtReader reader;
-				res=reader.MergeSrf(*coll,inStream);
-			}
-			else
-			{
-				YsFileIO::File fp(_collFileName,"r"); // Found some add-on airplanes referring to a collision SRF of a default airplanes.
-				if(nullptr!=fp)
-				{
-					YsTextFileInputStream inStream(fp);
-					YsShellExtReader reader;
-					res=reader.MergeSrf(*coll,inStream);
-				}
-			}
-
-
-
-			YsDeleteShrunkPolygon(*coll);
-			YsShellExt_OrientationUtil util;
-			if(YSOK==util.RecalculateNormalFromCurrentOrientation(coll->Conv()))
-			{
-				for(auto plNom : util.GetPolygonNormalPair())
-				{
-					coll->SetPolygonNormal(plNom.plHd,plNom.nom);
-				}
-				coll->SetTrustPolygonNormal(YSTRUE);
-			}
-			else
-			{
-				coll->SetTrustPolygonNormal(YSFALSE);
+				res=YSOK;
 			}
 
 			if(prop!=NULL)
@@ -2688,38 +2659,10 @@ YSRESULT FsWorld::PrepareGroundVisual(YsListItem <FsGroundTemplate> *templ) cons
 		templ->dat.coll=new FsVisualSrf;
 		if(templ->dat.coll!=NULL)
 		{
-			YsFileIO::File fp(templ->dat.GetCollisionFileName(),"r"); // fp.Fp() will be closed in the destructor.
-			if(nullptr!=fp)
+			if(YSOK==templ->dat.coll->Load(templ->dat.GetCollisionFileName()) ||
+			   YSOK==templ->dat.coll->Load(templ->dat.GetRawCollisionFileName()))
 			{
-				YsTextFileInputStream inStream(fp);
-				YsShellExtReader reader;
-				res=reader.MergeSrf(*templ->dat.coll,inStream);
-			}
-			else
-			{
-				YsFileIO::File fp(templ->dat.GetRawCollisionFileName(),"r"); // Found some add-on airplanes referring to a collision SRF of a default airplanes.
-				if(nullptr!=fp)
-				{
-					YsTextFileInputStream inStream(fp);
-					YsShellExtReader reader;
-					res=reader.MergeSrf(*templ->dat.coll,inStream);
-				}
-			}
-
-
-			YsDeleteShrunkPolygon(*templ->dat.coll);
-			YsShellExt_OrientationUtil util;
-			if(YSOK==util.RecalculateNormalFromCurrentOrientation(templ->dat.coll->Conv()))
-			{
-				for(auto plNom : util.GetPolygonNormalPair())
-				{
-					templ->dat.coll->SetPolygonNormal(plNom.plHd,plNom.nom);
-				}
-				templ->dat.coll->SetTrustPolygonNormal(YSTRUE);
-			}
-			else
-			{
-				templ->dat.coll->SetTrustPolygonNormal(YSFALSE);
+				res=YSOK;
 			}
 		}
 
@@ -4071,8 +4014,7 @@ FsAirplane *FsWorld::AddMatchingAirplane(
 			std::unique_ptr <FsVisualSrf> collPtr(new FsVisualSrf);
 
 			YsTextMemoryInputStream inStream(tmpl);
-			YsShellExtReader reader;
-			reader.MergeSrf(*collPtr,inStream);
+			collPtr->Load(inStream);
 
 			YsVec3 pos;
 			for(auto vtHd : collPtr->AllVertex())

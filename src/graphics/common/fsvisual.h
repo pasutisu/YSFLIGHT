@@ -15,7 +15,7 @@ class FsVisualSrf : public YsVisualSrf
 public:
 	using YsShell::SetMatrix;
 	using YsShell::ShootRayH;
-	using YsShell::SetTrustPolygonNormal;
+	using YsVisualSrf::Load;
 
 	inline FsVisualSrf(){}
 	FsVisualSrf(const FsVisualSrf &incoming);
