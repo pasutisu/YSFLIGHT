@@ -922,11 +922,32 @@ YSRESULT FsDogfight::ApplyControl(FsAirplane &air,FsSimulation *sim,const double
 		   flareClock<clock &&
 		   sim->IsMissileChasing(chasingWeaponType,chasingWeaponPos,&air)==YSTRUE)
 		{
-			if(chasingWeaponType==FSWEAPON_AIM120 && 
-			   (chasingWeaponPos-air.GetPosition()).GetSquareLength()<2000.0*2000.0)
+			switch(chasingWeaponType)
 			{
-				air.Prop().SetDispenseFlareButton(YSTRUE);
-				flareClock=clock+12.0;
+				default:
+					break;
+				case FSWEAPON_AIM54:
+					if((chasingWeaponPos-air.GetPosition()).GetSquareLength()<6000.0*6000.0)
+					{
+						air.Prop().SetDispenseFlareButton(YSTRUE);
+						flareClock=clock+4.0;
+					}
+					break;
+				case FSWEAPON_AIM120:
+					if((chasingWeaponPos-air.GetPosition()).GetSquareLength()<4000.0*4000.0)
+					{
+						air.Prop().SetDispenseFlareButton(YSTRUE);
+						flareClock=clock+4.0;
+					}
+					break;
+				case FSWEAPON_AIM9X:
+				case FSWEAPON_AIM9:
+					if((chasingWeaponPos-air.GetPosition()).GetSquareLength()<2000.0*2000.0)
+					{
+						air.Prop().SetDispenseFlareButton(YSTRUE);
+						flareClock=clock+2.0;
+					}
+					break;
 			}
 		}
 		// 2005/04/01 <<
