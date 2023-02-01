@@ -405,9 +405,9 @@ void FsSetDirectionalLight(const YsVec3 &/*cameraPosition*/ ,const YsVec3 &light
 		amb[2]=0.3F;
 		amb[3]=1.0F;
 
-		spc[0]=0.9F;
-		spc[1]=0.9F;
-		spc[2]=0.9F;
+		spc[0]=0.0F;
+		spc[1]=0.0F;
+		spc[2]=0.0F;
 		spc[3]=1.0F;
 		break;
 	case FSNIGHT:
@@ -471,7 +471,7 @@ void FsFogOn(const YsColor &col,const double &visibility)
 	// f  0:Completely fogged out   1:Clear
 	// f=e^(-d*d)
 	// d  0:Clear      Infinity: Completely fogged out
-	// 99% fogged out means:  e^(-d*d)=0.01  WhatÅfs d?
+	// 99% fogged out means:  e^(-d*d)=0.01  WhatÔøΩfs d?
 	// -d*d=loge(0.01)
 	// -d*d= -4.60517
 	// d=2.146
