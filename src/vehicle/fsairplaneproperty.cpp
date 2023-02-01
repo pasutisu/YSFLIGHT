@@ -92,6 +92,7 @@ void FsWeaponSlot::Initialize(void)
 	}
 	pos=YsOrigin();
 	isExternal=YSTRUE;
+	isVertical=YSFALSE;
 }
 
 
@@ -6164,8 +6165,9 @@ YSBOOL FsAirplaneProperty::FireSelectedWeapon(
 YSBOOL FsAirplaneProperty::FireWeapon(
     YSBOOL &blockedByBombBay,FsSimulation *sim,const double &ctime,class FsWeaponHolder &bul,FsExistence *owner,FSWEAPONTYPE wpnType)
 {
-	YSBOOL fired;
+	YSBOOL fired,isVertical;
 	fired=YSFALSE;
+	isVertical=YSFALSE;
 
 	blockedByBombBay=YSFALSE;
 
@@ -6221,6 +6223,7 @@ YSBOOL FsAirplaneProperty::FireWeapon(
 		if(slot>=0)
 		{
 			missilePos=chWeaponSlot[slot].pos;
+			isVertical=chWeaponSlot[slot].isVertical;
 		}
 		else
 		{
@@ -6263,7 +6266,12 @@ YSBOOL FsAirplaneProperty::FireWeapon(
 	}
 
 	missilePos=staMatrix*missilePos;
-	if(staMovingBackward==YSTRUE || staV<=chManSpeed1)
+	if(isVertical==YSTRUE)
+	{
+		missileAtt=staAttitude;
+		missileAtt.AddP(YsPi/2);
+	}
+	else if(staMovingBackward==YSTRUE || staV<=chManSpeed1)
 	{
 		missileAtt=staAttitude;
 	}
@@ -6493,7 +6501,7 @@ YSBOOL FsAirplaneProperty::FireWeapon(
 					         staV,
 					         340.0*1.5,
 					         GetAGMRange(wpnType),
-					         YsDegToRad(5.0),
+					         YsDegToRad(90.0),
 					         GetAGMRadarAngle(),
 					         50,
 					         owner,
@@ -6993,6 +7001,11 @@ int FsAirplaneProperty::GetMaxNumSlotWeapon(FSWEAPONTYPE wpnType) const
 
 void FsAirplaneProperty::AddWeaponSlot(const YsVec3 &pos,int nLoad[FSWEAPON_NUMWEAPONTYPE],int nSubLoad[FSWEAPON_NUMWEAPONTYPE],YSBOOL isExternal)
 {
+	AddWeaponSlot(pos,nLoad,nSubLoad,isExternal,YSFALSE);
+}
+
+void FsAirplaneProperty::AddWeaponSlot(const YsVec3 &pos,int nLoad[FSWEAPON_NUMWEAPONTYPE],int nSubLoad[FSWEAPON_NUMWEAPONTYPE],YSBOOL isExternal,YSBOOL isVertical)
+{
 	FsWeaponSlot newSlot;
 
 	int i;
@@ -7003,6 +7016,7 @@ void FsAirplaneProperty::AddWeaponSlot(const YsVec3 &pos,int nLoad[FSWEAPON_NUMW
 	}
 	newSlot.pos=pos;
 	newSlot.isExternal=isExternal;
+	newSlot.isVertical=isVertical;
 	chWeaponSlot.Append(newSlot);
 
 	FsWeaponSlotLoading newSlotLoading;
@@ -7235,7 +7249,7 @@ const double &FsAirplaneProperty::GetRocketSpeed(void) const
 
 const double &FsAirplaneProperty::GetAAMRadarAngle(void) const
 {
-	static double x=YsPi/6.0;
+	static double x=YsPi;
 	return x;
 }
 
@@ -7246,8 +7260,9 @@ const double FsAirplaneProperty::GetAAMRange(FSWEAPONTYPE wpnType) const
 	default:
 		break;
 	case FSWEAPON_AIM9:
-	case FSWEAPON_AIM9X:
 		return 5000.0;
+	case FSWEAPON_AIM9X:
+		return 10000.0;
 	case FSWEAPON_AIM120:
 		return 30000.0;
 	case FSWEAPON_AIM54:
@@ -7380,7 +7395,7 @@ unsigned int FsAirplaneProperty::GetAirTargetKey(void) const
 
 const double &FsAirplaneProperty::GetAGMRadarAngle(void) const
 {
-	static double x=YsPi/9.0;
+	static double x=YsPi;
 	return x;
 }
 
@@ -9828,6 +9843,7 @@ YSRESULT FsAirplaneProperty::AddWeaponSlotByArgument(int ac,char *av[])
 	{
 		FsWeaponSlot newSlot;
 		YSBOOL isExternal=YSTRUE;
+		YSBOOL isVertical=YSFALSE;
 		int i;
 
 		for(i=4; i<ac; i++)
@@ -9837,6 +9853,10 @@ YSRESULT FsAirplaneProperty::AddWeaponSlotByArgument(int ac,char *av[])
 				if(0==strcmp(av[i],"$INTERNAL"))
 				{
 					isExternal=YSFALSE;
+				}
+				else if(0==strcmp(av[i],"$VERTICAL"))
+				{
+					isVertical=YSTRUE;
 				}
 			}
 			else
@@ -9859,7 +9879,7 @@ YSRESULT FsAirplaneProperty::AddWeaponSlotByArgument(int ac,char *av[])
 				}
 			}
 		}
-		AddWeaponSlot(pos,newSlot.nLoad,newSlot.nSubLoad,isExternal);
+		AddWeaponSlot(pos,newSlot.nLoad,newSlot.nSubLoad,isExternal,isVertical);
 		return YSOK;
 	}
 

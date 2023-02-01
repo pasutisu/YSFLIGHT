@@ -53,6 +53,7 @@ public:
 	int nSubLoad[FSWEAPON_NUMWEAPONTYPE];  // Default 1, 800 for FUELTANK
 	YsVec3 pos;
 	YSBOOL isExternal;
+	YSBOOL isVertical;
 
 	FsWeaponSlot();
 	void Initialize(void);
@@ -604,6 +605,7 @@ public:
 	int GetMaxNumWeapon(FSWEAPONTYPE wpnType) const;
 	int GetMaxNumSlotWeapon(FSWEAPONTYPE wpnType) const;
 	void AddWeaponSlot(const YsVec3 &pos,int nLoad[FSWEAPON_NUMWEAPONTYPE],int nSubUnit[FSWEAPON_NUMWEAPONTYPE],YSBOOL isExternal);
+	void AddWeaponSlot(const YsVec3 &pos,int nLoad[FSWEAPON_NUMWEAPONTYPE],int nSubUnit[FSWEAPON_NUMWEAPONTYPE],YSBOOL isExternal, YSBOOL isVertical);
 	void AddWeapon(FSWEAPONTYPE wpnType,int n);
 	YSRESULT GetWeaponConfig(YsArray <int,64> &loading) const;
 	YSRESULT ApplyWeaponConfig(YSSIZE_T n,const int loading[]);
