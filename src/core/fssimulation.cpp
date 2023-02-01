@@ -4675,7 +4675,14 @@ void FsSimulation::SimControlByUser(const double &dt,FSUSERCONTROL userControl)
 
 		if(playerObj!=NULL)
 		{
-			playerObj->LockOn(this,cfgPtr->radarAltitudeLimit);
+			if(playerPlane!=NULL && playerPlane->Prop().GetPureRadarCrossSection()<1.0)
+			{
+				playerObj->LockOn(this,cfgPtr->radarAltitudeLimit,&mainWindowActualViewMode.viewAttitude);
+			}
+			else
+			{
+				playerObj->LockOn(this,cfgPtr->radarAltitudeLimit);
+			}
 		}
 
 #ifdef CRASHINVESTIGATION_SIMCONTROLBYUSER
@@ -13754,6 +13761,10 @@ YSBOOL FsSimulation::NeedToDrawInstrument(const ActualViewMode &actualViewMode) 
 				return YSTRUE;
 			}
 			else if(fabs(actualViewMode.actualViewHdg)<angleThr && fabs(actualViewMode.actualViewPch)<angleThr)
+			{
+				return YSTRUE;
+			}
+			else if(playerPlane->Prop().GetPureRadarCrossSection()<1.0)
 			{
 				return YSTRUE;
 			}

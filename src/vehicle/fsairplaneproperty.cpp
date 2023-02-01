@@ -7236,6 +7236,11 @@ const double FsAirplaneProperty::GetRadarCrossSection(void) const
 	return chRadarCrossSection+chBombBayRcs*(staBombBayDoor+staGear);
 }
 
+const double FsAirplaneProperty::GetPureRadarCrossSection(void) const
+{
+	return chRadarCrossSection;
+}
+
 const double &FsAirplaneProperty::GetBulletSpeed(void) const
 {
 	return chBulInitSpeed;

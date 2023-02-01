@@ -618,6 +618,7 @@ public:
 	const double GetReferenceCruisingAltitude(void) const;
 
 	const double GetRadarCrossSection(void) const;
+	const double GetPureRadarCrossSection(void) const;
 	const double &GetBulletSpeed(void) const;
 	const double &GetRocketSpeed(void) const;
 	const double &GetAAMRadarAngle(void) const;

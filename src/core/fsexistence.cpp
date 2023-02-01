@@ -1845,6 +1845,11 @@ void FsAirplane::ApplyControlAndGetFeedback(FsFlightControl &userInput,FSUSERCON
 
 YSBOOL FsAirplane::LockOn(FsSimulation *sim,const double &radarAltLimit)
 {
+	return LockOn(sim,radarAltLimit,nullptr);
+}
+
+YSBOOL FsAirplane::LockOn(FsSimulation *sim,const double &radarAltLimit,YsAtt3 *viewAttitude)
+{
 	const YsVec3 *pos;
 	const YsAtt3 *att;
 	double radar,aamAngle,agmAngle;
@@ -1852,7 +1857,16 @@ YSBOOL FsAirplane::LockOn(FsSimulation *sim,const double &radarAltLimit)
 	pos=&GetPosition();
 	att=&GetAttitude();
 
-	YsMatrix4x4 mat(prop.GetMatrix());
+	YsMatrix4x4 mat;
+	mat.Translate(*pos);
+	if(viewAttitude!=NULL)
+	{
+		mat.Rotate(*viewAttitude);
+	}
+	else
+	{
+		mat.Rotate(*att);
+	}
 	mat.Invert();
 
 	aamAngle=prop.GetAAMRadarAngle();
@@ -3290,6 +3304,11 @@ void FsGround::ApplyControlAndGetFeedback(FsFlightControl &userInput,FSUSERCONTR
 
 YSBOOL FsGround::LockOn(FsSimulation *sim,const double &radarAltLimit)
 {
+	return LockOn(sim,radarAltLimit,nullptr);
+}
+
+YSBOOL FsGround::LockOn(FsSimulation *sim,const double &radarAltLimit,YsAtt3 *viewAttitude)
+{
 	const YsVec3 *pos;
 	const YsAtt3 *att;
 	double radar,aamAngle,agmAngle;
@@ -3312,7 +3331,14 @@ YSBOOL FsGround::LockOn(FsSimulation *sim,const double &radarAltLimit)
 
 	YsMatrix4x4 mat;
 	mat.Translate(*pos);
-	mat.Rotate(*att);
+	if(viewAttitude!=NULL)
+	{
+		mat.Rotate(*viewAttitude);
+	}
+	else
+	{
+		mat.Rotate(*att);
+	}
 	mat.Invert();
 
 	aamAngle=YsPi/3.0;
