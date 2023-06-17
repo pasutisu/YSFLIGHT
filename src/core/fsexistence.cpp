@@ -1858,6 +1858,7 @@ YSBOOL FsAirplane::LockOn(FsSimulation *sim,const double &radarAltLimit,YsAtt3 *
 	att=&GetAttitude();
 
 	YsMatrix4x4 mat;
+	mat.Initialize();
 	mat.Translate(*pos);
 	if(viewAttitude!=NULL)
 	{
