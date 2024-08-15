@@ -1852,6 +1852,7 @@ YSBOOL FsAirplane::LockOn(FsSimulation *sim,const double &radarAltLimit,YsAtt3 *
 {
 	const YsVec3 *pos;
 	const YsAtt3 *att;
+	YSBOOL isOffBoresight=YSFALSE;
 	double radar,aamAngle,agmAngle;
 
 	pos=&GetPosition();
@@ -1862,6 +1863,7 @@ YSBOOL FsAirplane::LockOn(FsSimulation *sim,const double &radarAltLimit,YsAtt3 *
 	mat.Translate(*pos);
 	if(viewAttitude!=NULL)
 	{
+		isOffBoresight=YSTRUE;
 		mat.Rotate(*viewAttitude);
 	}
 	else
@@ -1919,7 +1921,7 @@ YSBOOL FsAirplane::LockOn(FsSimulation *sim,const double &radarAltLimit,YsAtt3 *
 						}
 						aamRange*=rcs;
 
-						if(r<aamAngle && r<radar && sqDist<aamRange*aamRange)
+						if((isOffBoresight==YSTRUE || r<aamAngle) && r<radar && sqDist<aamRange*aamRange)
 						{
 							radar=r;
 							airTarget=air;
@@ -1960,7 +1962,7 @@ YSBOOL FsAirplane::LockOn(FsSimulation *sim,const double &radarAltLimit,YsAtt3 *
 					double r;
 					r=sqrt(tpos.x()*tpos.x()+tpos.y()*tpos.y());
 					r=atan2(r,tpos.z());
-					if(r<agmAngle && r<radar)
+					if((isOffBoresight==YSTRUE || r<agmAngle) && r<radar)
 					{
 						radar=r;
 						gndTarget=gnd;

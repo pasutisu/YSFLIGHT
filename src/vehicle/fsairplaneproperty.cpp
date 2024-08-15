@@ -6501,7 +6501,7 @@ YSBOOL FsAirplaneProperty::FireWeapon(
 					         staV,
 					         340.0*1.5,
 					         GetAGMRange(wpnType),
-					         YsDegToRad(90.0),
+					         YsDegToRad(5.0),
 					         GetAGMRadarAngle(),
 					         50,
 					         owner,
@@ -7254,7 +7254,7 @@ const double &FsAirplaneProperty::GetRocketSpeed(void) const
 
 const double &FsAirplaneProperty::GetAAMRadarAngle(void) const
 {
-	static double x=YsPi;
+	static double x=YsPi/6.0;
 	return x;
 }
 
@@ -7400,7 +7400,7 @@ unsigned int FsAirplaneProperty::GetAirTargetKey(void) const
 
 const double &FsAirplaneProperty::GetAGMRadarAngle(void) const
 {
-	static double x=YsPi;
+	static double x=YsPi/9.0;
 	return x;
 }
 
