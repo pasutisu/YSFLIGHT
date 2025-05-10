@@ -9,6 +9,8 @@
 #include "fsutil.h"
 #include "fsweapon.h"
 
+#include "fsnetextension.h"
+
 enum
 {
 	FSNETERR_NOERR,
@@ -301,13 +303,8 @@ public:
 	int choosingMode;    // 0:Not choosing anything    1:Choose airplane    2:Choose start position
 	class FsFlightConfig *cfg;
 	class FsInterceptMissionInfo *imInfo;
+	std::unique_ptr <class FsNetExtensionCollection> extensionCollection;
 
-	double enduranceModeRemainingTime,gLimit;
-	int nEnduranceModeEnemyMax;
-	YSBOOL enduranceModeJet,enduranceModeWw2;
-
-	double baseDefenseModeRemainingTime;
-	double closeAirSupportMissionRemainingTime;
 	double netNoActivityTime;
 
 	YsString welcomeMessage;

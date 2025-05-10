@@ -40,6 +40,10 @@ add_library(${TARGET_NAME}
 	fssimextension_intercept.cpp
 	fssimextension_closeairsupport.cpp
 	fssimextension_groundtoair.cpp
+	fsnetextension.cpp
+	fsnetextension_closeairsupport.cpp
+	fsnetextension_endurance.cpp
+	fsnetextension_intercept.cpp
 	fs.h
 	fsaibasic.h
 	fsatc.h
@@ -84,6 +88,10 @@ add_library(${TARGET_NAME}
 	fssimextension_intercept.h
 	fssimextension_closeairsupport.h
 	fssimextension_groundtoair.h
+	fsnetextension.h
+	fsnetextension_closeairsupport.h
+	fsnetextension_endurance.h
+	fsnetextension_intercept.h
 )
 target_include_directories(${TARGET_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(${TARGET_NAME} 
